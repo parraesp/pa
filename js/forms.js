@@ -11,3 +11,7 @@ input.setCustomValidity('Las contraseñas no coinciden!');
 input.setCustomValidity('');
 }
 }
+
+function emailExists(){
+    document.getElementById('email').setCustomValidity('User exists!');
+}

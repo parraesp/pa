@@ -1,29 +1,23 @@
-<!DOCTYPE HTML>
 <?php
-if (isset($_POST['name']) && isset($_POST['email']) && isset($_POST['password']) && isset($_POST['password_repeat'])) {
-    filter_input(FILTER_SANITIZE_STRING, $_POST['name']);
+if (isset($_POST['email']) && isset($_POST['password'])) {
     filter_input(FILTER_SANITIZE_STRING, $_POST['password']);
-    filter_input(FILTER_SANITIZE_STRING, $_POST['password_repeat']);
     filter_input(FILTER_SANITIZE_EMAIL, $_POST['email']);
     filter_input(FILTER_VALIDATE_EMAIL, $_POST['email']);
     $email = $_POST['email'];
-    $name = $_POST['name'];
     $salt1 = '$%325cxwe2KK';
     $salt2 = 'asdad$&/&/&';
+    $password  = md5($salt1.$_POST['password'].$salt2);
     $conexion = mysql_connect("localhost", "root", "");
     mysql_select_db('social_flat', $conexion);
-    $query = mysql_query("SELECT * FROM `user` WHERE `email` LIKE '$email'");
-    if (mysql_num_rows($query) == 0) {
-        $password = md5($salt1 . $_POST['password'] . $salt2);
-
-        mysql_query("INSERT INTO `social_flat`.`user` (`ID_user`, `email`, `username`, `password`, `id_piso`) VALUES (NULL, '$email', '$name', '$password', -1);");
-        header('Location: entrar.php?reg=suc');
+    $query = mysql_query("SELECT * FROM `user` WHERE `email` LIKE '$email' AND `password` LIKE '$password'");
+    if(mysql_num_rows($query) != 0){
+        header('Location: APP');
     }
 }
 ?>
 <html>
     <head>
-        <title>Social Flat - Registro</title>
+        <title>Social Flat - Entrar</title>
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
         <meta name="description" content="" />
         <meta name="keywords" content="" />
@@ -66,17 +60,11 @@ if (isset($_POST['name']) && isset($_POST['email']) && isset($_POST['password'])
                 <div class="row 200%">
                     <div class="8u" id="content">
                         <header>
-                            <h2>Registro</h2>
-                            <p>
-                                Complete correctamente el siguiente formulario para empezar a usar Social Flat
-                            </p>
+                            <h2>Entrar</h2>
                         </header>
                         <form action="#" method="post">
-                            <?php ?>
-                            <label>Nombre </label><input type="text" name="name" placeholder="Nombre a mostrar" required pattern=".{5,16}" title="Debe tener de 5 a 16 caracteres"/><br/>
-                            <label>E-mail </label><input type="email" name="email" placeholder="Ser&aacute; tu usuario" required oninput=""/><br/>
-                            <label>Contrase&ntilde;a </label><input type="password" name="password"  id="password" placeholder="Tu contrase&ntilde;a" required pattern=".{8,18}" maxlength="18" title="Debe tener de 8 a 18 caracteres"/>  <br/>
-                            <label>Repita su contrase&ntilde;a </label><input type="password" name="password_repeat" placeholder="Rep&iacute;tela" required="required" oninput="check(this)" maxlength="18"/>  <br/>
+                            <label>E-mail </label><input type="email" name="email" required oninput=""/><br/>
+                            <label>Contrase&ntilde;a </label><input type="password" name="password"  id="password" required pattern=".{8,18}" maxlength="18" title="Debe tener de 8 a 18 caracteres"/>  <br/>
                             <input type="submit" value="Enviar">
                             <form>
 
@@ -85,26 +73,23 @@ if (isset($_POST['name']) && isset($_POST['email']) && isset($_POST['password'])
                                     <hr class="first" />
                                     <section>
                                         <header>
-                                            <h3>&iquest;Conoce las ventajas de ser miembro de Social Flat?</h3>
+                                            <h3>&iquest;No tienes cuenta en Social Flat?</h3>
                                         </header>
                                         <p>
                                             Ser miembro de social flat es gratuito y no tiene ning&uacute;n
                                             tipo de compromiso. En la comunidad conocer&aacute; mucha gente
                                             y &iexcl;podr&aacute; llevar la gesti&oacute;n de su piso de una forma
-                                            m&aacute;s c&oacute;moda!
+                                            m&aacute;s c&oacute;moda! Registrate haciendo click arriba en &quot;Registro&quot;
                                         </p>
                                     </section>
                                     <hr />  
                                     <section>
                                         <header>
-                                            <h3><a href="#">No olvide leer las condiciones de servicio</a></h3>
+                                            <h3><a href="#">&iquest;Necesitas ayuda?</a></h3>
                                         </header>
                                         <p>
-                                            Son cortas y de obligatoria lectura. &iexcl;No olvides leertelas!
+                                            M&aacute;ndanos un ticket o un correo electr&oacute;nico lo antes posible
                                         </p>
-                                        <footer>
-                                            <a href="#" class="button">Condiciones</a>
-                                        </footer>
                                     </section>
                                 </div>
                                 </div>
