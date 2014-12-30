@@ -6,11 +6,14 @@ if (isset($_POST['email']) && isset($_POST['password'])) {
     $email = $_POST['email'];
     $salt1 = '$%325cxwe2KK';
     $salt2 = 'asdad$&/&/&';
-    $password  = md5($salt1.$_POST['password'].$salt2);
+    $password = md5($salt1 . $_POST['password'] . $salt2);
     $conexion = mysql_connect("localhost", "root", "");
     mysql_select_db('social_flat', $conexion);
     $query = mysql_query("SELECT * FROM `user` WHERE `email` LIKE '$email' AND `password` LIKE '$password'");
-    if(mysql_num_rows($query) != 0){
+    if (mysql_num_rows($query) != 0) {
+        if (isset($_POST['recordar'])) {
+            setcookie('recordar', $_POST['email'], time() + 30 * 3600 * 24);
+        }
         header('Location: APP');
     }
 }
@@ -58,13 +61,18 @@ if (isset($_POST['email']) && isset($_POST['password'])) {
         <div class="wrapper style1">
             <div class="container">
                 <div class="row 200%">
+                    
                     <div class="8u" id="content">
+                        <?php if(isset($_COOKIE['exito']) && isset($_GET['reg'])){ ?>
+                        <div class="success">&iexcl;Usuario creado con exito!</div>
+                    <?php }?>
                         <header>
                             <h2>Entrar</h2>
                         </header>
                         <form action="#" method="post">
-                            <label>E-mail </label><input type="email" name="email" required oninput=""/><br/>
+                            <label>E-mail </label><input type="email" name="email" required oninput="" value="<?php if(isset($_COOKIE["recordar"])){echo $_COOKIE["recordar"];} ?>"/><br/>
                             <label>Contrase&ntilde;a </label><input type="password" name="password"  id="password" required pattern=".{8,18}" maxlength="18" title="Debe tener de 8 a 18 caracteres"/>  <br/>
+                            <label>&iquest;Recordar usuario?<input type="checkbox" checked name="recordar"/></label><br/>
                             <input type="submit" value="Enviar">
                             <form>
 
