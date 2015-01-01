@@ -23,10 +23,6 @@ input.setCustomValidity('');
 check(item);
 }
 
-function emailExists(){
-    document.getElementById('email').setCustomValidity('User exists!');
-}
-
 function terms(){
     Shadowbox.open({
         content:    '<div><b>1. Responsabilidad del usuario </b></div>'
