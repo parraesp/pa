@@ -34,6 +34,26 @@ function terms() {
     });
 }
 
+function SendRequest(desc, dueno, user) {
+    Shadowbox.open({
+        content: '<br><div>Descripci&oacute;n: </div>'
+                + '<p>Due&ntilde;o <strong>' + dueno + '</strong></p>'
+                + '<p><em>' + desc + '</em></p>'
+                + '<div>&iquest;Es el piso que buscabas? &iexcl;M&aacute;ndale una solicitud!</div>'
+                + '<form action="reg.php" method="post">\n\
+                <textarea id="shadowbox_contenido" name="contenido" autofocus></textarea><br>\n\
+                <input type="submit" value="Enviar" name="solicitud">\n\
+                <input type ="hidden" name="autor" value="'+user+'">\n\
+                <input type ="hidden" name="recep" value="'+dueno+'">\n\
+                </form>',
+        player: "html",
+        title: 'Enviar solicitud',
+        height: 550,
+        width: 550,
+        options: { enableKeys: false }
+    });
+}
+
 function getLocation() {
     if (navigator.geolocation) {
         navigator.geolocation.watchPosition(showPosition);
@@ -48,7 +68,7 @@ function showPosition(position) {
     setToForm(t);
 }
 
-function setToForm(t){
+function setToForm(t) {
     var elem = document.getElementById("coord");
     elem.value = t;
 }

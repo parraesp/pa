@@ -1,7 +1,6 @@
 <?php
 session_start();
-if (isset($_SESSION['user'])) {
-    $ban = false;
+if (isset($_SESSION['user'])) { 
     ?>
     <!DOCTYPE HTML>
     <html>
@@ -12,6 +11,10 @@ if (isset($_SESSION['user'])) {
         <body class="right-sidebar">
             <!-- Header -->
             <?php include_once './includes/nav.html'; ?>
+            <?php include_once './includes/functions.php'; 
+                if (solicitud()) {
+        header('Location: reg.php');
+    }?>
 
             <!-- Main -->
             <div class="wrapper style1">
@@ -64,9 +67,15 @@ if (isset($_SESSION['user'])) {
                                     $num_personas = $_POST['personas'];
                                     $direccion = $_POST['direccion'];
                                     $descripcion = $_POST['descripcion'];
-                                    $longitud = explode(' ',$_POST['coords'])[0];
-                                    $latitud = explode(' ',$_POST['coords'])[1];
-                                    $query = mysql_query("INSERT INTO `piso`(`ID_piso`, `creador`, `nombre`, `num_personas`, `direccion`, `descripcion`, `estatus`, `latitud`, `longitud`) VALUES (NULL, '$creador', '$nombre', '$num_personas', '$direccion', '$descripcion', '1', '$longitud', '$longitud');") or die(mysql_error());
+                                    $coordenadas = explode(' ', $_POST['coords']);
+                                    $longitud = $coordenadas[0];
+                                    $latitud = $coordenadas[1];
+                                    $xml = simplexml_load_file("http://maps.googleapis.com/maps/api/geocode/xml?latlng=" . $longitud . "," . $latitud . "&sensor=true");
+                                    $ciudad = $xml->result[0]->address_component[2]->long_name[0]->__toString();
+                                    $query = mysql_query("INSERT INTO `piso`(`ID_piso`, `creador`, `nombre`, `num_personas`, `direccion`, `descripcion`, `estatus`, `latitud`, `longitud`, `ciudad`) VALUES (NULL, '$creador', '$nombre', '$num_personas', '$direccion', '$descripcion', '1', '$longitud', '$latitud', '$ciudad');") or die(mysql_error());
+                                    $num = mysql_query("SELECT `ID_piso` FROM `piso` ORDER BY `ID_piso` DESC LIMIT 1;");
+                                    $val = mysql_fetch_array($num);
+                                    mysql_query("UPDATE `user` SET `id_piso`='$val[0]' WHERE `email` LIKE '$creador'");
                                     setcookie('exito', 'exito', time() + 8);
                                     header('Location: home.php?cre=suc');
                                 }
@@ -93,30 +102,30 @@ if (isset($_SESSION['user'])) {
                                 }
                                 ?>' placeholder="Nombre del piso" required pattern=".{5,25}" title="Debe tener de 5 a 25 caracteres"/><br/>
                                 <label>N&uacute;mero de personas:  </label><input type="number" name="personas" value='<?php
-                                if (isset($_POST['personas'])) {
-                                    echo $_POST['personas'];
-                                }
+                            if (isset($_POST['personas'])) {
+                                echo $_POST['personas'];
+                            }
                                 ?>' placeholder="N&uacute;mero de personas" required oninput=""/><br/>
                                 <label>Direcci&oacute;n </label><textarea  name="direccion" placeholder="Direcci&oacute;n f&iacute;sica del piso" required pattern=".{15,60}" title="Debe tener de 15 a 60 caracteres"/><?php
-                                if (isset($_POST['direccion'])) {
-                                    echo $_POST['direccion'];
-                                }
+                            if (isset($_POST['direccion'])) {
+                                echo $_POST['direccion'];
+                            }
                                 ?></textarea><br/>
                                 <label>Descripci&oacute;n</label><textarea  name="descripcion"
                                                                             placeholder="Descripci&oacute;n p&uacute;blica del piso" required pattern=".{25,200}" title="Debe tener de 25 a 200 caracteres" value='<?php
-                                                                            if (isset($_POST['descripcion'])) {
-                                                                                echo $_POST['descripcion'];
-                                                                            }
-                                                                            ?>'/><?php
+                            if (isset($_POST['descripcion'])) {
+                                echo $_POST['descripcion'];
+                            }
+                                ?>'/><?php
                                                                             if (isset($_POST['descripcion'])) {
                                                                                 echo $_POST['descripcion'];
                                                                             }
                                                                             ?></textarea><br/>
                                 <input type="hidden" name="coords"  id="coord" value="<?php
-                                if (isset($_POST['coords'])) {
-                                    echo $_POST['coords'];
-                                }
-                                ?>"/>
+                                                                        if (isset($_POST['coords'])) {
+                                                                            echo $_POST['coords'];
+                                                                        }
+                                                                            ?>"/>
                                 <input type="submit" value="Enviar">
                                 <form>
 
@@ -155,8 +164,10 @@ if (isset($_SESSION['user'])) {
                                     </body>
                                     </html>
                                     <?php
+                                } else if (!nuevo()) {
+                                    header('Location: home.php');
                                 } else {
-                                    setcookie('auth', 'auth', time() + 74);
+                                    setcookie('auth', 'auth', time() + 7);
                                     header('Location: ../entrar.php?auth=f');
                                 }
                                 ?>

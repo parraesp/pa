@@ -34,7 +34,7 @@ if (isset($_SESSION['user'])) {
                     <div class="row 200%">
                         <div class="8u" id="content">
                             <?php if (isset($_COOKIE['exito']) && isset($_GET['cre'])) { ?>
-                            <div class="success">&iexcl;Usuario creado con exito!</div>
+                            <div class="success">&iexcl;Piso creado con exito!</div>
                         <?php }
     ?>
                             <header>
@@ -99,7 +99,7 @@ if (isset($_SESSION['user'])) {
                                     </html>
                                     <?php
                                 } else {
-                                    setcookie('auth', 'auth', time() + 74);
+                                    setcookie('auth', 'auth', time() + 7);
                                     header('Location: ../entrar.php?auth=f');
                                 }
                                 ?>
