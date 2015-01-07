@@ -34,6 +34,36 @@ function terms() {
     });
 }
 
+function factura(estado, fecha, deudores){
+     Shadowbox.open({
+        content: '<div>Estado: '+estado+'</div>'
+                + '<div>Fecha: '+new Date(fecha*1000)+'</div>',
+        player: "html",
+        title: "Ver Factura",
+        height: 250,
+        width: 250
+    });
+}
+
+function crearFactura(user){
+    var tiempo  = new Date();
+    Shadowbox.open({
+        content: '<br><div>Detalles: </div>'
+                + '<p>Fecha: <strong>' + tiempo + '</strong></p>'
+                + '<form action="facturas.php" method="post">\n\
+                <input type="text" placeholder="Nombre de la factura" name="nombre">\n\
+                <input type="number" placeholder="P.Ej: 8,87" name="valor">€<br>\n\
+                <input type="submit" value="Enviar" name="solicitud">\n\
+                <input type ="hidden" name="creador" value="'+user+'">\n\
+                <input type ="hidden" name="fecha" value="'+tiempo.getSeconds()+'">\n\
+                </form>',
+        player: "html",
+        title: 'Crear Factura',
+        height: 550,
+        width: 550,
+        options: { enableKeys: false }
+    });
+}
 function SendRequest(desc, dueno, user) {
     Shadowbox.open({
         content: '<br><div>Descripci&oacute;n: </div>'

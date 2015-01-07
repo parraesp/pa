@@ -41,9 +41,10 @@ if (isset($_SESSION['user'])) {
                             $conexion = mysql_connect("localhost", "root", "");
                             mysql_select_db('social_flat', $conexion);
                             mysql_query("DELETE FROM `mensaje` WHERE `autor` LIKE '$user'");
+                            header('Location: reg.php');
                         }
                         ?>
-                        <div class="8u info" id="content">Tu solicitud ha sido enviada y est&aacute; a la espera de respuesta. Te rogamos paciencia.</div>
+                    <div class="8u info" id="content">Tu solicitud ha sido enviada y est&aacute; a la espera de respuesta. Te rogamos paciencia.</div>
                         <div class="8u info" id="content">Puedes cancelar tu solicitud haciendo click <a href='?can=nao'>aqu&iacute;</a></div>
                     <?php } else if (!isset($_POST['contenido'])) { ?>
                         <div class="8u info" id="content">Elija una de las siguientes opciones</div>

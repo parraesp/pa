@@ -87,7 +87,7 @@ if (isset($_POST['email']) && isset($_POST['password'])) {
                             <label>Contrase&ntilde;a </label><input type="password" name="password"  id="password" required pattern=".{8,18}" maxlength="18" title="Debe tener de 8 a 18 caracteres"/>  <br/>
                             <label>&iquest;Recordar usuario?<input type="checkbox" checked name="recordar"/></label><br/>
                             <input type="submit" value="Enviar">
-                            <form>
+                            </form>
 
                                 </div>
                                 <div class="4u" id="sidebar">

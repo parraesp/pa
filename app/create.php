@@ -6,12 +6,13 @@ if (isset($_SESSION['user'])) {
     <html>
         <head>
             <title>Social Flat - Inicio</title>
-            <?php include_once './includes/headers.html'; ?>
+            <?php include_once './includes/headers.html'; 
+            include_once './includes/functions.php'; ?>
         </head>
         <body class="right-sidebar">
             <!-- Header -->
             <?php include_once './includes/nav.html'; ?>
-            <?php include_once './includes/functions.php'; 
+            <?php 
                 if (solicitud()) {
         header('Location: reg.php');
     }?>
