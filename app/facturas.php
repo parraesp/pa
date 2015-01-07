@@ -33,6 +33,8 @@ if (isset($_SESSION['user'])) {
                                 $valor = $_POST['valor'];
                                 $nombre = $_POST['nombre'];
                                 $fecha = $_POST['fecha'];
+                                $query = "INSERT INTO `social_flat`.`factura` (`ID_factura`, `creador`, `valor`, `fecha`, `estado`, `nombre`) VALUES (NULL, '$user', '$valor', '$fecha', '0', '$nombre');";
+                                $res = mysql_query($query);
                                 $var = mysql_query("SELECT `ID_factura` FROM `factura` ORDER BY `fecha` ASC LIMIT 1");
                                 $id = mysql_fetch_array($var)[0];
                                 $var2 = mysql_query("SELECT * FROM `piso`,`user` WHERE `piso`.`ID_piso` LIKE `user`.`id_piso` AND `piso`.");
@@ -41,8 +43,7 @@ if (isset($_SESSION['user'])) {
                                     $tmp = mysql_fetch_array(id2);
                                     $query = "INSERT INTO `social_flat`.`factura_deud` (`ID_factura`, `deudor`, `fecha`, `estado`) VALUES ('$id', '', '', '');";
                                 }
-                                $query = "INSERT INTO `social_flat`.`factura` (`ID_factura`, `creador`, `valor`, `fecha`, `partes`, `estado`, `nombre`) VALUES (NULL, '$user', '$valor', '$fecha', '', '0', '$nombre');";
-                                $res = mysql_query($query);
+                                
                                 ?>
                                 <div class="success">&iexcl;Factura creada con exito!</div>
     <?php }

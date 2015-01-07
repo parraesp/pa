@@ -15,6 +15,8 @@ if (isset($_POST['email']) && isset($_POST['password'])) {
         if (isset($_POST['recordar'])) {
             setcookie('recordar', $_POST['email'], time() + 30 * 3600 * 24);
             $_SESSION['user'] = $_POST['email'];
+            $temp  = mysql_fetch_array($query);
+            $_SESSION['idpiso'] = $temp[4];
         }
         header('Location: app/home.php');
     } else {
