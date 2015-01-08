@@ -34,10 +34,10 @@ function terms() {
     });
 }
 
-function factura(estado, fecha, deudores){
-     Shadowbox.open({
-        content: '<div>Estado: '+estado+'</div>'
-                + '<div>Fecha: '+new Date(fecha*1000)+'</div>',
+function factura(estado, fecha, deudores) {
+    Shadowbox.open({
+        content: '<div>Estado: ' + estado + '</div>'
+                + '<div>Fecha: ' + new Date(fecha * 1000) + '</div>',
         player: "html",
         title: "Ver Factura",
         height: 250,
@@ -45,25 +45,77 @@ function factura(estado, fecha, deudores){
     });
 }
 
-function crearFactura(user){
-    var tiempo  = new Date();
+function crearFactura(user) {
+    var tiempo = new Date();
     Shadowbox.open({
         content: '<br><div>Detalles: </div>'
                 + '<p>Fecha: <strong>' + tiempo + '</strong></p>'
                 + '<form action="facturas.php" method="post">\n\
                 <input type="text" placeholder="Nombre de la factura" name="nombre">\n\
-                <input type="number" placeholder="P.Ej: 8,87" name="valor">€<br>\n\
-                <input type="submit" value="Enviar" name="solicitud">\n\
-                <input type ="hidden" name="creador" value="'+user+'">\n\
-                <input type ="hidden" name="fecha" value="'+tiempo.getSeconds()+'">\n\
+                <input type="number" placeholder="P.Ej: 8,87" name="valor">€<br>\n\\n\
+                                <input type ="hidden" name="creador" value="' + user + '">\n\
+                <input type ="hidden" name="fecha" value="' + Math.floor(Date.now() / 1000) + '">\n\
+                <input type="submit" value="Enviar" name="gast">\n\
                 </form>',
         player: "html",
         title: 'Crear Factura',
         height: 550,
         width: 550,
-        options: { enableKeys: false }
+        options: {enableKeys: false}
     });
 }
+
+function contacto(id, nombre, telefono, email) {
+    Shadowbox.open({
+        content: '<div>Nombre: ' + nombre + '</div>'
+                + '<div>Telefono: ' + telefono + '</div>'
+                + '<div>Email: ' + email + '</div>'
+                + '<a href="contactos.php?edit=' + id + '"><img src="images/edit.png" style="width:20%;height:30%;"></a>'
+                + '<a href="contactos.php?delete=' + id + '"><img src="images/delete.png" style="width:20%;height:30%;"></a>',
+        player: "html",
+        title: "Contacto",
+        height: 150,
+        width: 250
+    });
+}
+
+function crearContacto(piso) {
+    var tiempo = new Date();
+    Shadowbox.open({
+        content: '<form action="contactos.php" method="post">\n\
+                Nombre <input type="text" placeholder="Nombre del contacto" name="nombre">\n\
+                Telefono <input type="text" placeholder="Telefono" name="tel">\n\
+                Email <input type="email" placeholder="Correo electr&oacute;nico" name="email"><br>\n\
+                                <input type ="hidden" name="creador" value="' + piso + '">\n\
+                <input type ="hidden" name="fecha" value="' + Math.floor(Date.now() / 1000) + '">\n\
+                <input type="submit" value="Enviar" name="contacto">\n\
+                </form>',
+        player: "html",
+        title: 'Crear Contacto',
+        height: 550,
+        width: 550,
+        options: {enableKeys: false}
+    });
+}
+
+function editarContacto(id, nombre, telefono, email) {
+    Shadowbox.open({
+        content: '<form action="contactos.php" method="post">\n\
+                Nombre <input type="text"  name="nombre" value='+nombre+'>\n\
+                Telefono <input type="text" name="tel" value='+telefono+'>\n\
+                Email <input type="email" name="email" value='+email+'><br>\n\
+                <input type="hidden" name="piso" value='+id+'>\n\
+                <input type="submit" value="Enviar" name="editarContacto">\n\
+                </form>',
+        player: "html",
+        title: 'Editar Contacto',
+        height: 550,
+        width: 550,
+        options: {enableKeys: false}
+    });
+}
+
+
 function SendRequest(desc, dueno, user) {
     Shadowbox.open({
         content: '<br><div>Descripci&oacute;n: </div>'
@@ -73,14 +125,14 @@ function SendRequest(desc, dueno, user) {
                 + '<form action="reg.php" method="post">\n\
                 <textarea id="shadowbox_contenido" name="contenido" autofocus></textarea><br>\n\
                 <input type="submit" value="Enviar" name="solicitud">\n\
-                <input type ="hidden" name="autor" value="'+user+'">\n\
-                <input type ="hidden" name="recep" value="'+dueno+'">\n\
+                <input type ="hidden" name="autor" value="' + user + '">\n\
+                <input type ="hidden" name="recep" value="' + dueno + '">\n\
                 </form>',
         player: "html",
         title: 'Enviar solicitud',
         height: 550,
         width: 550,
-        options: { enableKeys: false }
+        options: {enableKeys: false}
     });
 }
 

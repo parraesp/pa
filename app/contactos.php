@@ -24,71 +24,86 @@ if (isset($_SESSION['user'])) {
                     <div class="row 200%">
                         <div class="8u" id="content">
                             <?php
-                            if (isset($_POST['gast'])) {
+                            if (isset($_POST['editarContacto'])) {
+                                if (contactoSuyo($_POST['piso'])) {
+                                    $piso = $_POST['piso'];
+                                    $nombre = $_POST['nombre'];
+                                    $telefono = $_POST['tel'];
+                                    $email = $_POST['email'];
+                                    mysql_query("UPDATE `contacto` SET `nombre`='$nombre',`Telefono`=$telefono,`Email`='$email' WHERE `ID_contacto` LIKE '$piso'") or die(mysql_error());
+                                }
+                            }
+                            if(isset($_GET['erase']) && $_GET['id']){
+                                if(contactoSuyo($_GET['id'])){
+                                    $idef = $_GET['id'];
+                                    mysql_query("DELETE FROM `contacto` WHERE `ID_contacto` LIKE '$idef'");
+                                }
+                            }
+                            if (isset($_GET['edit']) || isset($_GET['delete'])) {
+
+                                if (isset($_GET['edit'])) {
+                                    if (contactoSuyo($_GET['edit'])) {
+                                        $val = $_GET['edit'];
+                                        $res = mysql_query("SELECT * FROM `contacto` WHERE `ID_contacto` LIKE '$val'");
+                                        $tmp = mysql_fetch_array($res);
+                                        $piso = $tmp[0];
+                                        $nombre = $tmp[2];
+                                        $telefono = $tmp[3];
+                                        $email = $tmp[4];
+                                        echo "<script type='text/javascript'>document.addEventListener('DOMContentLoaded', function() {editarContacto('$piso','$nombre','$telefono', '$email')}, false);</script>";
+                                    } else {
+                                        ?>
+                                        <div class="error">&iexcl;No tiene permiso sobre ese objeto!</div>
+                                        <?php
+                                    }
+                                }
+                                if (isset($_GET['delete'])) {
+                                    if (contactoSuyo($_GET['delete'])) {
+                                        $con = $_GET['delete'];
+                                        echo "<script type='text/javascript'>document.addEventListener('DOMContentLoaded', function() {if(confirm('¿Deseas borrar el contacto?')==true){window.location.href='contactos.php?erase=true&id=$con';}}, false);</script>";
+                                    } else {
+                                        ?>
+                                        <div class="error">&iexcl;No puede borrar ese objeto!</div>
+                                        <?php
+                                    }
+                                }
+                            }
+                            $piso = $_SESSION['idpiso'];
+                            if (isset($_POST['contacto'])) {
                                 filter_input(FILTER_SANITIZE_STRING, $_POST['nombre']);
-                                filter_input(FILTER_VALIDATE_FLOAT, $_POST['valor']);
                                 mysql_connect('localhost', 'root', '');
                                 mysql_select_db('social_flat');
                                 $user = $_SESSION['user'];
-                                $valor = $_POST['valor'];
                                 $nombre = $_POST['nombre'];
-                                $fecha = $_POST['fecha'];
-                                $var = mysql_query("SELECT `ID_factura` FROM `factura` ORDER BY `fecha` ASC LIMIT 1");
-                                $id = mysql_fetch_array($var)[0];
-                                $var2 = mysql_query("SELECT * FROM `piso`,`user` WHERE `piso`.`ID_piso` LIKE `user`.`id_piso` AND `piso`.");
-                                $id2 = mysql_num_rows($var2)[0];
-                                for($i=0; $i<$id2; $i++){
-                                    $tmp = mysql_fetch_array(id2);
-                                    $query = "INSERT INTO `social_flat`.`factura_deud` (`ID_factura`, `deudor`, `fecha`, `estado`) VALUES ('$id', '', '', '');";
-                                }
-                                $query = "INSERT INTO `social_flat`.`factura` (`ID_factura`, `creador`, `valor`, `fecha`, `partes`, `estado`, `nombre`) VALUES (NULL, '$user', '$valor', '$fecha', '', '0', '$nombre');";
-                                $res = mysql_query($query);
+                                $telefono = $_POST['tel'];
+                                $email = $_POST['email'];
+                                $sql = "INSERT INTO `contacto`(`ID_contacto`, `ID_piso`, `nombre`, `Telefono`, `Email`) VALUES (NULL, $piso,'$nombre','$telefono','$email')";
+                                mysql_query($sql) or die(mysql_error());
                                 ?>
-                                <div class="success">&iexcl;Factura creada con exito!</div>
-    <?php }
-    ?>
+                                <div class="success">&iexcl;Contacto creado con exito!</div>
+                            <?php }
+                            ?>
                             <header>
                                 <h2>Contactos</h2>
                             </header>
-                            <p onclick="crearFactura(<?php $_SESSION['user']; ?>)" class="button">Crear Factura</p>
+                            <p onclick="crearContacto('<?php $_SESSION['idpiso']; ?>')" class="button">Crear Contacto</p>
                             <?php
                             mysql_connect('localhost', 'root', '');
                             mysql_select_db('social_flat');
                             $user = $_SESSION['user'];
-                            $query = "SELECT * FROM `contacto` WHERE ``;";
+                            $query = "SELECT * FROM `contacto` WHERE `ID_piso` LIKE '$piso';";
                             $res = mysql_query($query);
                             ?>
                             <table class="default"><tr><th>ID</th><th>Nombre</th><th>Tel&eacute;fono</th><th>Email</th></tr>
-                                <?php
-                                while ($tmp = mysql_fetch_row($res)) {
-                                    if ($tmp[5] == $user && $tmp[0] != $fac) {
-                                        $fac = $tmp[0];
-                                        ?>
-                                        <tr onClick="factura('<?php if ($tmp[9]) {
-                                echo 'Pagada';
-                            } else {
-                                echo 'No pagada';
-                            } ?>',<?php echo $tmp[7]; ?>)"><td><?php echo $tmp[0]; ?></td><td><?php echo $tmp[5]; ?></td><td><?php echo date('Y-m-d', $tmp[7]); ?></td><td><?php if ($tmp[9]) {
-                                echo 'Pagada';
-                            } else {
-                                echo 'No pagada';
-                            } ?></td></tr>
-            <?php
-        } else if ($tmp[1] == $user) {
-            ?>
-                                        <tr onClick="factura(<?php if ($tmp[9]) {
-                echo 'Pagada';
-            } else {
-                echo 'No pagada';
-            } ?>)"><td><?php echo $tmp[0]; ?></td><td><?php echo $tmp[5]; ?></td><td><?php echo date('Y-m-d', $tmp[7]); ?></td><td><?php if ($tmp[9]) {
-                echo 'Pagada';
-            } else {
-                echo 'No pagada';
-            } ?></td></tr>
-            <?php
-        }
-    }
-    ?>
+                                        <?php
+                                        if (!is_bool($res)) {
+                                            while ($tmp = mysql_fetch_row($res)) {
+                                                ?>
+                                        <tr onClick="contacto('<?php echo $tmp[0]; ?>', '<?php echo $tmp[2]; ?>', '<?php echo $tmp[3]; ?>', '<?php echo $tmp[4]; ?>')"><td><?php echo $tmp[0]; ?></td><td><?php echo $tmp[2]; ?></td><td><?php echo $tmp[3] ?></td><td><?php echo $tmp[4] ?></td></tr>
+                                        <?php
+                                    }
+                                }
+                                ?>
                             </table>
                         </div>
                     </div>
