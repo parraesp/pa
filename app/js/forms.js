@@ -34,10 +34,20 @@ function terms() {
     });
 }
 
-function factura(estado, fecha, deudores) {
+function factura(estado, fecha, pagado, param) {
+    var t = ' <img src="images/tick.png"><br>&iexcl;Haz click aqu&iacute; para marcar como pagado!' ;
+    if(pagado != "No pagada"){
+        t = '<img src="images/cross.png">';
+    }
+    var k = '';
+    if(param=='true'){
+        k='<div><a href="facturas.php?fec='+fecha+'&delete=true">&iquest;Borrar?</a></div>';
+    }
     Shadowbox.open({
         content: '<div>Estado: ' + estado + '</div>'
-                + '<div>Fecha: ' + new Date(fecha * 1000) + '</div>',
+                + '<div>Fecha: ' + new Date(fecha * 1000) + '</div>'
+                + '<div>Tu parte: ' + pagado + '</div>'+k
+                + '<div style="text-align:center;"><a href="facturas.php?fec='+fecha+'&pay='+pagado.substr(0,1)+'">'+t+'</a></div>',
         player: "html",
         title: "Ver Factura",
         height: 250,
@@ -51,8 +61,8 @@ function crearFactura(user) {
         content: '<br><div>Detalles: </div>'
                 + '<p>Fecha: <strong>' + tiempo + '</strong></p>'
                 + '<form action="facturas.php" method="post">\n\
-                <input type="text" placeholder="Nombre de la factura" name="nombre">\n\
-                <input type="number" placeholder="P.Ej: 8,87" name="valor">€<br>\n\\n\
+                <input type="text" placeholder="Nombre de la factura" name="nombre" required>\n\
+                <input type="number" placeholder="P.Ej: 8,87" name="valor" required>€<br>\n\\n\
                                 <input type ="hidden" name="creador" value="' + user + '">\n\
                 <input type ="hidden" name="fecha" value="' + Math.floor(Date.now() / 1000) + '">\n\
                 <input type="submit" value="Enviar" name="gast">\n\
