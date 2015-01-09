@@ -65,6 +65,30 @@ function crearFactura(user) {
     });
 }
 
+function mostrarFormularioLimpieza() {
+    $('#formularioLimpieza').toggle(2000);
+}
+
+function aniadir_zonas(num) {
+    var form = document.getElementById('formularioLimpieza');
+    while (form.childNodes.length > 18) {
+        form.removeChild(form.lastChild);
+    }
+    for (var i = 0; i < num.value; i++) {
+        var nodoZona = document.createElement('input');
+        nodoZona.setAttribute('type', 'text');
+        nodoZona.setAttribute('name', 'zona' + i);
+        form.appendChild(document.createTextNode('Zona de limpieza: '));
+        form.appendChild(nodoZona);
+        form.appendChild(document.createElement('br'));
+    }
+    var nodoEnviar = document.createElement('input');
+    nodoEnviar.setAttribute('type', 'submit');
+    nodoEnviar.setAttribute('name', 'enviarLimpieza');
+    nodoEnviar.setAttribute('value', 'Enviar');
+    form.appendChild(nodoEnviar);
+}
+
 function contacto(id, nombre, telefono, email) {
     Shadowbox.open({
         content: '<div>Nombre: ' + nombre + '</div>'
@@ -101,10 +125,10 @@ function crearContacto(piso) {
 function editarContacto(id, nombre, telefono, email) {
     Shadowbox.open({
         content: '<form action="contactos.php" method="post">\n\
-                Nombre <input type="text"  name="nombre" value='+nombre+'>\n\
-                Telefono <input type="text" name="tel" value='+telefono+'>\n\
-                Email <input type="email" name="email" value='+email+'><br>\n\
-                <input type="hidden" name="piso" value='+id+'>\n\
+                Nombre <input type="text"  name="nombre" value=' + nombre + '>\n\
+                Telefono <input type="text" name="tel" value=' + telefono + '>\n\
+                Email <input type="email" name="email" value=' + email + '><br>\n\
+                <input type="hidden" name="piso" value=' + id + '>\n\
                 <input type="submit" value="Enviar" name="editarContacto">\n\
                 </form>',
         player: "html",
