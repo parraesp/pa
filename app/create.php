@@ -1,5 +1,6 @@
 <?php
 session_start();
+include_once 'includes/functions.php';
 if (isset($_SESSION['user'])) { 
     ?>
     <!DOCTYPE HTML>
@@ -7,7 +8,7 @@ if (isset($_SESSION['user'])) {
         <head>
             <title>Social Flat - Inicio</title>
             <?php include_once './includes/headers.html'; 
-            include_once './includes/functions.php'; ?>
+             ?>
         </head>
         <body class="right-sidebar">
             <!-- Header -->
