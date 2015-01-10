@@ -1,22 +1,23 @@
 <?php
 session_start();
 include_once 'includes/functions.php';
-if (isset($_SESSION['user'])) { 
+if (isset($_SESSION['user'])) {
     ?>
     <!DOCTYPE HTML>
     <html>
         <head>
             <title>Social Flat - Inicio</title>
-            <?php include_once './includes/headers.html'; 
-             ?>
+            <?php include_once './includes/headers.html';
+            ?>
         </head>
         <body class="right-sidebar">
             <!-- Header -->
             <?php include_once './includes/nav.html'; ?>
-            <?php 
-                if (solicitud()) {
-        header('Location: reg.php');
-    }?>
+            <?php
+            if (solicitud()) {
+                header('Location: reg.php');
+            }
+            ?>
 
             <!-- Main -->
             <div class="wrapper style1">
@@ -78,6 +79,11 @@ if (isset($_SESSION['user'])) {
                                     $num = mysql_query("SELECT `ID_piso` FROM `piso` ORDER BY `ID_piso` DESC LIMIT 1;");
                                     $val = mysql_fetch_array($num);
                                     mysql_query("UPDATE `user` SET `id_piso`='$val[0]' WHERE `email` LIKE '$creador'");
+                                    $_SESSION['idpiso'] = $val[0];
+                                    $user = $_SESSION['user'];
+                                    $datos_contacto = mysql_query("SELECT * FROM `user` WHERE `email` LIKE '$user'");
+                                    $res_datos_contacto = mysql_fetch_row($datos_contacto);
+                                    mysql_query("INSERT INTO `contacto`(`ID_contacto`, `ID_piso`, `nombre`, `Telefono`, `Email`) VALUES (NULL, $val[0],'$res_datos_contacto[2]','-','$user')");
                                     setcookie('exito', 'exito', time() + 8);
                                     header('Location: home.php?cre=suc');
                                 }
@@ -104,30 +110,30 @@ if (isset($_SESSION['user'])) {
                                 }
                                 ?>' placeholder="Nombre del piso" required pattern=".{5,25}" title="Debe tener de 5 a 25 caracteres"/><br/>
                                 <label>N&uacute;mero de personas:  </label><input type="number" name="personas" value='<?php
-                            if (isset($_POST['personas'])) {
-                                echo $_POST['personas'];
-                            }
+                                if (isset($_POST['personas'])) {
+                                    echo $_POST['personas'];
+                                }
                                 ?>' placeholder="N&uacute;mero de personas" required oninput=""/><br/>
                                 <label>Direcci&oacute;n </label><textarea  name="direccion" placeholder="Direcci&oacute;n f&iacute;sica del piso" required pattern=".{15,60}" title="Debe tener de 15 a 60 caracteres"/><?php
-                            if (isset($_POST['direccion'])) {
-                                echo $_POST['direccion'];
-                            }
+                                if (isset($_POST['direccion'])) {
+                                    echo $_POST['direccion'];
+                                }
                                 ?></textarea><br/>
                                 <label>Descripci&oacute;n</label><textarea  name="descripcion"
                                                                             placeholder="Descripci&oacute;n p&uacute;blica del piso" required pattern=".{25,200}" title="Debe tener de 25 a 200 caracteres" value='<?php
-                            if (isset($_POST['descripcion'])) {
-                                echo $_POST['descripcion'];
-                            }
-                                ?>'/><?php
+                                                                            if (isset($_POST['descripcion'])) {
+                                                                                echo $_POST['descripcion'];
+                                                                            }
+                                                                            ?>'/><?php
                                                                             if (isset($_POST['descripcion'])) {
                                                                                 echo $_POST['descripcion'];
                                                                             }
                                                                             ?></textarea><br/>
                                 <input type="hidden" name="coords"  id="coord" value="<?php
-                                                                        if (isset($_POST['coords'])) {
-                                                                            echo $_POST['coords'];
-                                                                        }
-                                                                            ?>"/>
+                                if (isset($_POST['coords'])) {
+                                    echo $_POST['coords'];
+                                }
+                                ?>"/>
                                 <input type="submit" value="Enviar">
                                 <form>
 
@@ -161,7 +167,7 @@ if (isset($_SESSION['user'])) {
 
                                     </div>
 
-                                    <?php include_once './includes/footer.html'; ?>
+    <?php include_once './includes/footer.html'; ?>
 
                                     </body>
                                     </html>

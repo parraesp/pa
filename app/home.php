@@ -45,6 +45,11 @@ if (isset($_SESSION['user'])) {
                                         $data = mysql_fetch_array($datos);
                                         $var_temp = mysql_fetch_array($var);
                                         mysql_query("UPDATE `user` SET `id_piso`='$data[0]' WHERE `email` LIKE '$var_temp[1]'");
+                                        
+                                        // Metemos los contactos en el piso
+                                        $datos_contacto = mysql_query("SELECT * FROM `user` WHERE `email` LIKE '$var_temp[1]'");
+                                        $res_datos_contacto = mysql_fetch_row($datos_contacto);
+                                        mysql_query("INSERT INTO `contacto`(`ID_contacto`, `ID_piso`, `nombre`, `Telefono`, `Email`) VALUES (NULL, $data[0],'$res_datos_contacto[2]','-','$res_datos_contacto[1]')");
                                     }
                                 } else {
                                     echo "FRECH";

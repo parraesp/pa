@@ -88,6 +88,7 @@ if (isset($_SESSION['user'])) {
                                 <?php
                                 $total_balance = 0;
                                 $pagados = mysql_query("SELECT * FROM `factura_deud` WHERE `deudor` LIKE '$user' ORDER BY `fecha` DESC");
+                                if(!is_bool($res)){
                                 while ($tmp = mysql_fetch_row($res)) {
                                     $pagado_temp = mysql_fetch_row($pagados);
                                     ?>
@@ -119,7 +120,7 @@ if (isset($_SESSION['user'])) {
                                                 }
                                                 ?></td></tr>
                                                 <?php
-                                            }
+                                }}
                                             ?>
                             </table>
                         </div>
