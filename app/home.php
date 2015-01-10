@@ -41,12 +41,10 @@ if (isset($_SESSION['user'])) {
                                 if (!is_bool($var)) {
                                     if (mysql_num_rows($var) == 1) {
                                         mysql_query("UPDATE `mensaje` SET `estado`='1' WHERE `destinatario` LIKE '$user' AND `id_mensaje` LIKE '$id'") or die(mysql_error());
-                                        $creador = $var['destinatario'];
-                                        $datos = mysql_query("SELECT * FROM `piso` WHERE `creador` LIKE '$creador'");
+                                        $datos = mysql_query("SELECT * FROM `piso` WHERE `creador` LIKE '$user'");
                                         $data = mysql_fetch_array($datos);
-                                        print_r($data);
-                                        $var_temp = $var['autor'];
-                                        mysql_query("UPDATE `user` SET `id_piso`='$data[0]' WHERE `email` LIKE '$var_temp'");
+                                        $var_temp = mysql_fetch_array($var);
+                                        mysql_query("UPDATE `user` SET `id_piso`='$data[0]' WHERE `email` LIKE '$var_temp[1]'");
                                     }
                                 } else {
                                     echo "FRECH";

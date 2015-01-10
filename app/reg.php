@@ -44,8 +44,11 @@ if (isset($_SESSION['user'])) {
                             header('Location: reg.php');
                         }
                         ?>
-                    <div class="8u info" id="content">Tu solicitud ha sido enviada y est&aacute; a la espera de respuesta. Te rogamos paciencia.</div>
+                        <div class="8u info" id="content">Tu solicitud ha sido enviada y est&aacute; a la espera de respuesta. Te rogamos paciencia.</div>
                         <div class="8u info" id="content">Puedes cancelar tu solicitud haciendo click <a href='?can=nao'>aqu&iacute;</a></div>
+                        <script type="text/javascript">
+                            window.setTimeout(function () {window.location="reg.php";}, 5000);
+                        </script>
                     <?php } else if (!isset($_POST['contenido'])) { ?>
                         <div class="8u info" id="content">Elija una de las siguientes opciones</div>
                         <div class="row">
