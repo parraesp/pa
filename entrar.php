@@ -70,9 +70,10 @@ if (isset($_POST['email']) && isset($_POST['password'])) {
                 <div class="row 200%">
 
                     <div class="8u" id="content">
-                        <?php if (isset($_COOKIE['exito']) && isset($_GET['reg'])) { ?>
+                        <?php 
+                        if (isset($_COOKIE['exito']) && isset($_GET['reg'])) { ?>
                             <div class="success">&iexcl;Usuario creado con exito!</div>
-                        <?php } else if (isset($_COOKIE['auth']) && isset($_GET['auth'])) { ?>
+                        <?php } else if ( isset($_GET['auth'])) { ?>
                             <div class="warning">&iexcl;Tienes que logearte para acceder a tu cuenta!</div>
                         <?php } else if (isset($_POST['email'])) {
                             ?><div class="error">&iexcl;Combinaci&oacute;n de usuario y contrase&ntilde;a incorrecta!</div>

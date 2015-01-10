@@ -16,7 +16,7 @@ if (isset($_SESSION['user'])) {
         ?>">
 
             <!-- Header -->
-    <?php include_once './includes/nav.html'; ?>
+            <?php include_once './includes/nav.html'; ?>
 
             <!-- Main -->
             <div class="wrapper style1">
@@ -41,12 +41,10 @@ if (isset($_SESSION['user'])) {
                                 if (!is_bool($var)) {
                                     if (mysql_num_rows($var) == 1) {
                                         mysql_query("UPDATE `mensaje` SET `estado`='1' WHERE `destinatario` LIKE '$user' AND `id_mensaje` LIKE '$id'") or die(mysql_error());
-                                        $creador = $var['destinatario'];
-                                        $datos = mysql_query("SELECT * FROM `piso` WHERE `creador` LIKE '$creador'");
+                                        $datos = mysql_query("SELECT * FROM `piso` WHERE `creador` LIKE '$user'");
                                         $data = mysql_fetch_array($datos);
-                                        print_r($data);
-                                        $var_temp = $var['autor'];
-                                        mysql_query("UPDATE `user` SET `id_piso`='$data[0]' WHERE `email` LIKE '$var_temp'");
+                                        $var_temp = mysql_fetch_array($var);
+                                        mysql_query("UPDATE `user` SET `id_piso`='$data[0]' WHERE `email` LIKE '$var_temp[1]'");
                                     }
                                 } else {
                                     echo "FRECH";
@@ -57,8 +55,8 @@ if (isset($_SESSION['user'])) {
                                 $mensaje = mysql_fetch_row($var);
                                 ?>
                                 <div class="info" onclick="mensaje('<?php echo $mensaje[1]; ?>', '<?php echo $mensaje[2]; ?>', '<?php echo $mensaje[3]; ?>', '<?php echo $mensaje[0]; ?>', '<?php echo $mensaje[5]; ?>')">&iexcl;Tienes nuevos mensajes!</div>
-    <?php }
-    ?>
+                            <?php }
+                            ?>
 
 
                         </div>
@@ -94,7 +92,7 @@ if (isset($_SESSION['user'])) {
 
             </div>
 
-    <?php include_once './includes/footer.html'; ?>
+            <?php include_once './includes/footer.html'; ?>
 
         </body>
     </html>

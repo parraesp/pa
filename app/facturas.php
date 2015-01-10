@@ -131,7 +131,11 @@ if (isset($_SESSION['user'])) {
                                     <h3><?php 
                                     $resultado = mysql_query("SELECT `num_personas` FROM `piso` WHERE `ID_piso` LIKE '$piso'");
                                     $numero = mysql_fetch_row($resultado);
-                                    echo number_format($total_balance/$numero[0],2)?>€</h3>
+                                    $divisor = $numero[0];
+                                    if($divisor == 0){
+                                        $divisor = 1;
+                                    }
+                                    echo number_format($total_balance/$divisor,2)?>€</h3>
                                 </header>
 
                             </section>

@@ -1,5 +1,10 @@
 <?php
-
+print_r($_GET);
+if(isset($_GET['exit'])){
+        session_destroy();
+        header("Location: ../entrar.php");
+    
+}
 function nuevo() {
     $ban = false;
     $us = $_SESSION['user'];
