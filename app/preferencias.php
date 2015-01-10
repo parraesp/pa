@@ -5,96 +5,13 @@ if (isset($_SESSION['user'])) {
     <!DOCTYPE HTML>
     <html>
         <head>
-            <title>Social Flat - Limpieza</title>
+            <title>Social Flat - Preferencias</title>
             <?php
             mysql_connect('localhost', 'root', '');
             mysql_select_db('social_flat');
             ?>
             <?php include_once './includes/headers.html'; ?>
             <?php include_once './includes/functions.php'; ?>
-            <link rel='stylesheet' href='./js/fullcalendar/fullcalendar.css' />
-            <script src='./js/fullcalendar/lib/moment.min.js'></script>
-            <script src='./js/fullcalendar/fullcalendar.js'></script>
-            <script src='./js/fullcalendar/lang/es.js'></script>
-            <script type="text/javascript">
-                var zonas = [];
-                var nombres = [];
-    <?php
-    if (isset($_GET['borrarLimpieza'])) {
-        borrarLimpieza($idpiso);
-    }
-    if (isset($_SESSION['idpiso'])) {
-        $idpiso = $_SESSION['idpiso'];
-
-        $result = mysql_query("SELECT * FROM `limpieza` WHERE `ID_piso`='$idpiso'");
-        if (mysql_num_rows($result) > 0) {
-            $datos = mysql_fetch_row($result);
-            $inicio = $datos[1];
-            $fin = $datos[2];
-            $frecuencia = $datos[3];
-            $result = mysql_query("SELECT nombre FROM `zonas_limpieza` WHERE `ID_piso`='$idpiso'");
-            while ($zona = mysql_fetch_row($result)) {
-                echo "zonas[zonas.length]=" . json_encode($zona) . ";";
-            }
-            $result2 = mysql_query("SELECT username FROM `user` WHERE `id_piso`='$idpiso'");
-            while ($nombre = mysql_fetch_row($result2)) {
-                echo "nombres[nombres.length]=" . json_encode($nombre) . ";";
-            }
-            ?>
-                        Date.prototype.addDays = function(days)
-                        {
-                            var dat = new Date(this.valueOf());
-                            dat.setDate(dat.getDate() + parseInt(days));
-                            return dat;
-                        };
-                        var fechaInicio = new Date("<?php echo $inicio; ?>");
-                        //Establecemos la fecha final
-                        var fechaFinal = new Date("<?php echo $fin; ?>");
-                        var frecuencia = <?php echo $frecuencia; ?>;
-                        //Restamos la fechaFinal menos fechaInicio, 
-                        //esto establece la diferencia entre las fechas
-                        var fechaResta = fechaFinal - fechaInicio;
-                        //Transformamos el tiempo de diferencia en días.
-                        fechaResta = (((fechaResta / 1000) / 60) / 60) / 24;
-                        var colores = ['blue', 'green', 'red', 'purple', 'chocolate', 'cyan', 'deeppink', 'gold', 'brown', 'black'];
-                        var n = 0;
-                        var eventos = [];
-                        for (var i = 0; i < fechaResta; i += frecuencia) {
-                            var days = 1000 * 60 * 60 * 24 * i;
-                            var d1 = new Date(fechaInicio.getTime() + days);
-                            var d2 = fechaInicio.addDays(i + frecuencia);
-                            if (nombres.length === zonas.length) {
-                                n++;
-                                if (n === nombres.length) {
-                                    n = 0;
-                                }
-                            }
-                            var nAux = nombres[n];
-                            for (var j = 0; j < zonas.length; j++) {
-                                n++;
-                                if (n === nombres.length) {
-                                    n = 0;
-                                }
-                                var titulo = 'Zona:' + zonas[j] + '. Limpiador: ' + nombres[n];
-                                eventos[eventos.length] = {title: titulo,
-                                    start: d1.getFullYear() + '-' + (parseInt(d1.getMonth()) + 1) + '-' + d1.getDate(),
-                                    end: d2.getFullYear() + '-' + (parseInt(d2.getMonth()) + 1) + '-' + d2.getDate(),
-                                    color: colores[j],
-                                    allDay: true};
-                            }
-                        }
-                        $(document).ready(function() {
-                            $('#formularioLimpieza').hide();
-                            $('#calendar').fullCalendar({
-                                events: eventos
-                            });
-
-                        });
-            <?php
-        }
-    }
-    ?>
-            </script>
         </head>
         <body class="right-sidebar" onload="<?php
         if (nuevo()) {
@@ -180,8 +97,8 @@ if (isset($_SESSION['user'])) {
                         }
                     }
                     ?>
-                    <p onclick="mostrarFormularioLimpieza()" class="button">Editar turnos de  limpieza</p>
                     <p onclick="confirmDel('¿Desea eliminar los turnos de limpieza?', 'limpieza.php?borrarLimpieza')" class="button">Eliminar turnos de limpieza</p>
+                    <p onclick="mostrarFormularioLimpieza()" class="button">Editar turnos de  limpieza</p>
                     <form id = 'formularioLimpieza' action = '#' method = 'post'>
                         <p>Especifica el inicio y fin de los turnos de limpieza.</p>
                         Inicio: <input type = 'date' name = 'inicio' required="required"><br>

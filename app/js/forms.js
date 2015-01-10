@@ -178,3 +178,10 @@ function setToForm(t) {
     var elem = document.getElementById("coord");
     elem.value = t;
 }
+
+function confirmDel(mensaje,direccion) {
+    var confirmar = confirm(mensaje);
+    if (confirmar) {
+        window.location = direccion;
+    }
+}

@@ -26,7 +26,7 @@ function solicitud() {
     return $ban;
 }
 
-function contactoSuyo($contacto){
+function contactoSuyo($contacto) {
     $ban = false;
     $us = $_SESSION['idpiso'];
     $query = "SELECT * FROM `contacto` WHERE `ID_piso` LIKE '$us' AND `ID_contacto` LIKE '$contacto'";
@@ -39,4 +39,8 @@ function contactoSuyo($contacto){
     return $ban;
 }
 
+function borrarLimpieza($idpiso) {
+    mysql_query("DELETE FROM `zonas_limpieza` WHERE ID_piso='$idpiso'");
+    mysql_query("DELETE FROM `limpieza` WHERE ID_piso='$idpiso'");
+}
 ?>
