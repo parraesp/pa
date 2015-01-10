@@ -79,16 +79,28 @@ function mostrarFormularioLimpieza() {
     $('#formularioLimpieza').toggle(2000);
 }
 
+function mostrarCuenta() {
+    $('#datosPiso').toggle(1000);
+    $('#datosUsuario').toggle(1000);
+}
+
+function mostrarPiso() {
+    $('#datosUsuario').toggle(1000);
+    $('#datosPiso').toggle(1000);
+}
+
 function aniadir_zonas(num) {
     var form = document.getElementById('formularioLimpieza');
-    while (form.childNodes.length > 18) {
+    while (form.childNodes.length > 22) {
         form.removeChild(form.lastChild);
     }
     for (var i = 0; i < num.value; i++) {
         var nodoZona = document.createElement('input');
         nodoZona.setAttribute('type', 'text');
         nodoZona.setAttribute('name', 'zona' + i);
-        form.appendChild(document.createTextNode('Zona de limpieza: '));
+        var nodoLabel = document.createElement('label');
+        nodoLabel.appendChild(document.createTextNode('Zona de limpieza: '));
+        form.appendChild(nodoLabel);
         form.appendChild(nodoZona);
         form.appendChild(document.createElement('br'));
     }
@@ -194,4 +206,35 @@ function confirmDel(mensaje,direccion) {
     if (confirmar) {
         window.location = direccion;
     }
+}
+
+function editarNombre() {
+    Shadowbox.open({
+        content: '<form action="preferencias.php" method="post">\n\
+                <label>Nuevo nombre:</label> <input type="text"  name="nombre" required="required">\n\
+                <label>Contrase&ntilde;a: </label><input type="password" name="password" required="required">\n\
+                <input type="submit" value="Enviar" name="editarNombre">\n\
+                </form>',
+        player: "html",
+        title: 'Editar nombre',
+        height: 550,
+        width: 550,
+        options: {enableKeys: false}
+    });
+}
+
+function cambiarContrasenia() {
+    Shadowbox.open({
+        content: '<form action="preferencias.php" method="post">\n\
+                <label>Contrase&ntilde;a antigua:</label> <input type="password"  name="passAnt" required="required">\n\
+                <label>Contrase&ntilde;a nueva:</label> <input type="password"  name="newPass" required="required">\n\
+                <label>Confirmar contrase&ntilde;a nueva:</label> <input type="password"  name="confPass" required="required">\n\
+                <input type="submit" value="Enviar" name="cambiarPass">\n\
+                </form>',
+        player: "html",
+        title: 'Cambiar contrase&ntilde;a',
+        height: 550,
+        width: 550,
+        options: {enableKeys: false}
+    });
 }
