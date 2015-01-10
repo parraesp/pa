@@ -7,6 +7,10 @@ function nuevo() {
     $conexion = mysql_connect("localhost", "root", "");
     mysql_select_db('social_flat', $conexion);
     $q = mysql_query($query);
+    if(is_bool($q)){
+        $query = "SELECT * FROM `user` WHERE `email` LIKE '$us' AND `id_piso` NOT LIKE '-1';";
+        $q = mysql_query($query);
+    }
     if (mysql_num_rows($q) == 0) {
         $ban = true;
     }
@@ -16,7 +20,7 @@ function nuevo() {
 function solicitud() {
     $ban = false;
     $us = $_SESSION['user'];
-    $query = "SELECT * FROM `mensaje` WHERE `autor` LIKE '$us' AND `estado`<3;";
+    $query = "SELECT * FROM `mensaje` WHERE `autor` LIKE '$us' AND `estado` LIKE '0';";
     $conexion = mysql_connect("localhost", "root", "");
     mysql_select_db('social_flat', $conexion);
     $q = mysql_query($query);

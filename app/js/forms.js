@@ -35,19 +35,19 @@ function terms() {
 }
 
 function factura(estado, fecha, pagado, param) {
-    var t = ' <img src="images/tick.png"><br>&iexcl;Haz click aqu&iacute; para marcar como pagado!' ;
-    if(pagado != "No pagada"){
+    var t = ' <img src="images/tick.png"><br>&iexcl;Haz click aqu&iacute; para marcar como pagado!';
+    if (pagado != "No pagada") {
         t = '<img src="images/cross.png"><br>Marcar como no pagado';
     }
     var k = '';
-    if(param=='true'){
-        k='<div><a href="facturas.php?fec='+fecha+'&delete=true">&iquest;Borrar?</a></div>';
+    if (param == 'true') {
+        k = '<div><a href="facturas.php?fec=' + fecha + '&delete=true">&iquest;Borrar?</a></div>';
     }
     Shadowbox.open({
         content: '<div>Estado: ' + estado + '</div>'
                 + '<div>Fecha: ' + new Date(fecha * 1000) + '</div>'
-                + '<div>Tu parte: ' + pagado + '</div>'+k
-                + '<div style="text-align:center;"><a href="facturas.php?fec='+fecha+'&pay='+pagado.substr(0,1)+'">'+t+'</a></div>',
+                + '<div>Tu parte: ' + pagado + '</div>' + k
+                + '<div style="text-align:center;"><a href="facturas.php?fec=' + fecha + '&pay=' + pagado.substr(0, 1) + '">' + t + '</a></div>',
         player: "html",
         title: "Ver Factura",
         height: 250,
@@ -122,6 +122,22 @@ function contacto(id, nombre, telefono, email) {
         title: "Contacto",
         height: 150,
         width: 250
+    });
+}
+
+function  mensaje(autor, receptor, fecha, id, cuerpo) {
+    Shadowbox.open({
+        content: '<div>Autor: ' + autor + '</div>'
+                + '<div>Receptor: ' + receptor + '</div>'
+                + '<div>Fecha: ' + new Date(fecha * 1000) + '</div>'
+                + '<div>Estado: ' + 'Pendiente' + '</div>'
+                + '<div>Mensaje:<br> ' + cuerpo + '</div>'
+                + '<div style="text-align:center;"><a href="home.php?accept=' + id + '"><img src="images/tick.png" style="width:20%;height:30%;"></a>'
+                + '<a href="home.php?reject=' + id + '"><img src="images/cross.png" style="width:20%;height:30%;"></a><br>Aceptar Rechazar</div>',
+        player: "html",
+        title: "Mensaje",
+        height: 350,
+        width: 350
     });
 }
 
@@ -201,7 +217,7 @@ function setToForm(t) {
     elem.value = t;
 }
 
-function confirmDel(mensaje,direccion) {
+function confirmDel(mensaje, direccion) {
     var confirmar = confirm(mensaje);
     if (confirmar) {
         window.location = direccion;
