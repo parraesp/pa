@@ -23,6 +23,7 @@ if (isset($_SESSION['user'])) {
                 <div class="container">
                     <div class="row 200%">
                         <div class="8u" id="content">
+                            <h2>Inicio</h2>
                             <?php
                             $user = $_SESSION['user'];
                             if (isset($_GET['reject'])) {
@@ -45,7 +46,7 @@ if (isset($_SESSION['user'])) {
                                         $data = mysql_fetch_array($datos);
                                         $var_temp = mysql_fetch_array($var);
                                         mysql_query("UPDATE `user` SET `id_piso`='$data[0]' WHERE `email` LIKE '$var_temp[1]'");
-                                        
+
                                         // Metemos los contactos en el piso
                                         $datos_contacto = mysql_query("SELECT * FROM `user` WHERE `email` LIKE '$var_temp[1]'");
                                         $res_datos_contacto = mysql_fetch_row($datos_contacto);
@@ -62,7 +63,30 @@ if (isset($_SESSION['user'])) {
                                 <div class="info" onclick="mensaje('<?php echo $mensaje[1]; ?>', '<?php echo $mensaje[2]; ?>', '<?php echo $mensaje[3]; ?>', '<?php echo $mensaje[0]; ?>', '<?php echo $mensaje[5]; ?>')">&iexcl;Tienes nuevos mensajes!</div>
                             <?php }
                             ?>
+                            <a href="facturas.php"><div class="info">Tu balance asciende a <?php
+                                    $piso = $_SESSION['idpiso'];
+                                    $query = "SELECT * FROM `factura` WHERE `ID_piso` LIKE '$piso' ORDER BY `fecha` DESC";
+                                    $res = mysql_query($query);
+                                    $total_balance = 0;
+                                    $pagados = mysql_query("SELECT * FROM `factura_deud` WHERE `deudor` LIKE '$user' ORDER BY `fecha` DESC");
+                                    if (!is_bool($res)) {
+                                        while ($tmp = mysql_fetch_row($res)) {
+                                            $pagado_temp = mysql_fetch_row($pagados);
+                                            if (!$tmp[5]) {
+                                                $total_balance-=$tmp[3];
+                                            }
+                                        }
+                                    }
 
+                                    $resultado = mysql_query("SELECT `num_personas` FROM `piso` WHERE `ID_piso` LIKE '$piso'");
+                                    $numero = mysql_fetch_row($resultado);
+                                    $divisor = $numero[0];
+                                    if ($divisor == 0) {
+                                        $divisor = 1;
+                                    }
+                                    echo number_format($total_balance / $divisor, 2);
+                                    ?> €</div></a>
+                                <?php ?>
 
                         </div>
                         <div class="4u" id="sidebar">
