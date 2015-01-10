@@ -80,13 +80,13 @@ function mostrarFormularioLimpieza() {
 }
 
 function mostrarCuenta() {
-    $('#datosPiso').toggle(1000);
-    $('#datosUsuario').toggle(1000);
+    $('#datosPiso').hide(1000);
+    $('#datosUsuario').show(1000);
 }
 
 function mostrarPiso() {
-    $('#datosUsuario').toggle(1000);
-    $('#datosPiso').toggle(1000);
+    $('#datosUsuario').hide(1000);
+    $('#datosPiso').show(1000);
 }
 
 function aniadir_zonas(num) {
@@ -249,6 +249,24 @@ function cambiarContrasenia() {
                 </form>',
         player: "html",
         title: 'Cambiar contrase&ntilde;a',
+        height: 550,
+        width: 550,
+        options: {enableKeys: false}
+    });
+}
+
+function editarPiso(nombre, num, direccion, descripcion) {
+    Shadowbox.open({
+        content: '<form action="preferencias.php?piso" method="post">\n\
+                <label>Nuevo nombre:</label> <input type="text"  name="nombre" value="' + nombre + '" required="required">\n\
+                <label>Nuevo n&uacute;mero de personas:</label> <input type="number"  name="num" value="' + num + '" required="required">\n\
+                <label>Nueva direcci&oacute;n:</label> <input type="text"  name="direccion" value="' + direccion + '" required="required">\n\
+                <label>Nueva descripci&oacute;n:</label> <input type="text"  name="descripcion" value="' + descripcion + '" required="required">\n\
+                <label>Contrase&ntilde;a: </label><input type="password" name="password" required="required">\n\
+                <input type="submit" value="Enviar" name="editarPiso">\n\
+                </form>',
+        player: "html",
+        title: 'Editar Piso',
         height: 550,
         width: 550,
         options: {enableKeys: false}

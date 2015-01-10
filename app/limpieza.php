@@ -95,7 +95,7 @@ if (isset($_SESSION['user'])) {
     ?>
             </script>
         </head>
-        <body class="right-sidebar" onload="<?php
+        <body class="no-sidebar" onload="<?php
         if (nuevo()) {
             header('Location: reg.php');
         }
@@ -179,8 +179,8 @@ if (isset($_SESSION['user'])) {
                         }
                     }
                     ?>
-                    <p onclick="mostrarFormularioLimpieza()" class="button">Editar turnos de  limpieza</p>
-                    <p onclick="confirmDel('¿Desea eliminar los turnos de limpieza?', 'limpieza.php?borrarLimpieza')" class="button">Eliminar turnos de limpieza</p>
+                    <a onclick="mostrarFormularioLimpieza()" class="button">Editar turnos de  limpieza</a>
+                    <a onclick="confirmDel('¿Desea eliminar los turnos de limpieza?', 'limpieza.php?borrarLimpieza')" class="button">Eliminar turnos de limpieza</a>
                     <form id = 'formularioLimpieza' action = '#' method = 'post'>
                         <p>Especifica el inicio y fin de los turnos de limpieza.</p>
                         <label>Inicio: </label><input type = 'date' name = 'inicio' required="required"><br>

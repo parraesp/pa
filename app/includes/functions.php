@@ -7,8 +7,8 @@ function nuevo() {
     $conexion = mysql_connect("localhost", "root", "");
     mysql_select_db('social_flat', $conexion);
     $q = mysql_query($query);
-    if(is_bool($q)){
-        $query = "SELECT * FROM `user` WHERE `email` LIKE '$us' AND `id_piso` NOT LIKE '-1';";
+    if (mysql_num_rows($q) == 0) {
+        $query = "SELECT * FROM `user` WHERE `email` LIKE '$us' AND `id_piso`!='-1';";
         $q = mysql_query($query);
     }
     if (mysql_num_rows($q) == 0) {

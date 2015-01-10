@@ -27,7 +27,7 @@ if (isset($_SESSION['user'])) {
                             if (isset($_POST['name']) && isset($_POST['personas']) && isset($_POST['direccion']) && isset($_POST['descripcion'])) {
                                 $ban = true;
                                 filter_input(FILTER_SANITIZE_STRING, $_POST['name']);
-                                filter_input(FILTER_SANITIZE_NUMBER_INT, $_POST['personas']);
+                                filter_input(FILTER_VALIDATE_INT, $_POST['personas']);
                                 filter_input(FILTER_SANITIZE_STRING, $_POST['direccion']);
                                 filter_input(FILTER_SANITIZE_STRING, $_POST['descripcion']);
                                 if (strlen($_POST['name']) < 5 || strlen($_POST['name']) > 25) {
@@ -41,13 +41,13 @@ if (isset($_SESSION['user'])) {
                                     <div class="error">&iexcl;Numero de personas tiene que ser un n&uacute;mero entero positivo!</div>
                                     <?php
                                     $ban = false;
-                                } if (strlen($_POST['direccion']) < 15 || strlen($_POST['direccion']) > 60) {
+                                } if (strlen($_POST['direccion']) < 5 || strlen($_POST['direccion']) > 60) {
                                     ?>
                                     <div class="error">&iexcl;La direccii&oacute;n debe tener entre 15 y 60 caracteres!</div>
                                     <?php
                                     $ban = false;
                                 }
-                                if (strlen($_POST['descripcion']) < 25 || strlen($_POST['descripcion']) > 200) {
+                                if (strlen($_POST['descripcion']) < 0 || strlen($_POST['descripcion']) > 200) {
                                     ?>
                                     <div class="error">&iexcl;La descripci&oacute;n debe tener entre 25 y 200 caracteres!</div>
                                     <?php
