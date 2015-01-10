@@ -1,8 +1,8 @@
 <?php
-
-if (isset($_GET['exit'])) {
-    session_destroy();
-    header("Location: ../entrar.php");
+print_r($_SESSION);
+if(isset($_GET['exit'])){
+        session_destroy();
+        header("Location: ../entrar.php");
 }
 
 function nuevo() {
