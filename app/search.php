@@ -1,5 +1,6 @@
 <?php
 session_start();
+include_once 'includes/functions.php';
 if (isset($_SESSION['user'])) {
     ?>
     <!DOCTYPE HTML>
