@@ -1,10 +1,10 @@
 <?php
-print_r($_GET);
-if(isset($_GET['exit'])){
-        session_destroy();
-        header("Location: ../entrar.php");
-    
+
+if (isset($_GET['exit'])) {
+    session_destroy();
+    header("Location: ../entrar.php");
 }
+
 function nuevo() {
     $ban = false;
     $us = $_SESSION['user'];
@@ -12,7 +12,7 @@ function nuevo() {
     $conexion = mysql_connect("localhost", "root", "");
     mysql_select_db('social_flat', $conexion);
     $q = mysql_query($query);
-    if(mysql_num_rows($q) == 0){
+    if (mysql_num_rows($q) == 0) {
         $query = "SELECT * FROM `user` WHERE `email` LIKE '$us' AND `id_piso`!= '-1';";
         $q = mysql_query($query);
     }
@@ -52,4 +52,5 @@ function borrarLimpieza($idpiso) {
     mysql_query("DELETE FROM `zonas_limpieza` WHERE ID_piso='$idpiso'");
     mysql_query("DELETE FROM `limpieza` WHERE ID_piso='$idpiso'");
 }
+
 ?>
