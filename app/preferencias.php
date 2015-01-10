@@ -12,109 +12,199 @@ if (isset($_SESSION['user'])) {
             ?>
             <?php include_once './includes/headers.html'; ?>
             <?php include_once './includes/functions.php'; ?>
+            <script type="text/javascript">
+                <!--
+                        $(document).ready(function() {
+    <?php if (isset($_GET['piso']) || isset($_GET['borrarPiso'])) { ?>
+                        $('#datosUsuario').hide();
+    <?php } else { ?>
+                        $('#datosPiso').hide();
+    <?php } ?>
+                });
+    -->
+            </script>
         </head>
-        <body class="right-sidebar" onload="<?php
-        if (nuevo()) {
-            header('Location: reg.php');
-        }
-        ?>">
-            <!-- Header -->
+        <body class="no-sidebar">
             <?php include_once './includes/nav.html'; ?>
-            <!-- Main -->
-
             <div class="wrapper style1">
                 <div class="container">
-                    <h2>Turnos de limpieza</h2>
+                    <h2>Preferencias</h2>
                     <?php
-                    if (isset($_POST['enviarLimpieza'])) {
-                        $validar = TRUE;
-                        $inicio = filter_input(INPUT_POST, 'inicio', FILTER_SANITIZE_STRING);
-                        $inicioArray = explode('-', $inicio);
-                        $fin = filter_input(INPUT_POST, 'fin', FILTER_SANITIZE_STRING);
-                        $finArray = explode('-', $fin);
-                        $frecuencia = filter_input(INPUT_POST, 'frecuencia', FILTER_VALIDATE_INT);
-                        $zonas = filter_input(INPUT_POST, 'zonas', FILTER_VALIDATE_INT);
-                        if ($zonas === NULL || $zonas === FALSE || $zonas < 0 || $zonas > 10) {
-                            $validar = FALSE;
-                            ?>
-                            <div class="error">Las zonas debe ser un entero positivo</div>.
-                            <?php
+                    $email = $_SESSION['user'];
+                    $idpiso = $_SESSION['idpiso'];
+                    $sinPiso = false;
+                    if ($idpiso == '-1') {
+                        $sinPiso = true;
+                    }
+                    if (isset($_GET['borrarPiso'])) {
+                        mysql_query("UPDATE `social_flat`.`user` SET id_piso='-1' WHERE `email`='$email'");
+                        $_SESSION['idpiso'] = '-1';
+                        $result = mysql_query("SELECT email FROM `user` WHERE `id_piso`='$idpiso'");
+                        $nuevo = mysql_fetch_array($result);
+                        if ($nuevo) {
+                            $nuevoEmail = $nuevo['email'];
+                            mysql_query("UPDATE `social_flat`.`piso` SET creador='$nuevoEmail' WHERE `ID_piso`='$idpiso'");
                         } else {
-                            for ($i = 0; $i < $zonas; $i++) {
-                                $zona[$i] = filter_input(INPUT_POST, 'zona' . $i, FILTER_SANITIZE_STRING);
-                                if ($zona[$i] === NULL || $zona[$i] === FALSE) {
-                                    $validar = FALSE;
-                                    ?>
-                                    <div class="error">Las zona de limpieza debe una cadena de caract&eacute;res.</div>.
-                                    <?php
-                                }
-                            }
-                            if ($inicio === NULL || $inicio === FALSE || !checkdate($inicioArray[1], $inicioArray[2], $inicioArray[0])) {
-                                $validar = FALSE;
-                                ?>
-                                <div class="error">Las fecha de inicio debe seguir el formato aaaa-dd-mm.</div>.
-                                <?php
-                            }
-                            if ($fin === NULL || $fin === FALSE || !checkdate($finArray[1], $finArray[2], $finArray[0]) || $fin < $inicio) {
-                                $validar = FALSE;
-                                ?>
-                                <div class="error">Las fecha de fin debe debe seguir el formato aaaa-dd-mm y ser mayor que la de inicio.</div>.
-                                <?php
-                            }if ($frecuencia === NULL || $frecuencia === FALSE || $frecuencia < 0) {
-                                $validar = FALSE;
-                                ?>
-                                <div class="error">Las frecuencia debe ser un n&uacute;mero entero.</div>.
-                                <?php
-                            }
+                            mysql_query("DELETE FROM `piso` WHERE ID_piso='$idpiso'");
                         }
-                        if ($validar) {
-                            $idpiso = $_SESSION['idpiso'];
-                            $result = mysql_query("SELECT * FROM `limpieza` WHERE `ID_piso`='$idpiso'");
-                            if (mysql_num_rows($result) == 0) {
-                                $query = "INSERT INTO `social_flat`.`limpieza` (`ID_piso`, `inicio`, `fin`, `frecuencia`) VALUES ('$idpiso', '$inicio', '$fin', '$frecuencia');";
-                                $res = mysql_query($query);
-                                for ($i = 0; $i < $zonas; $i++) {
-                                    $nombre = $zona[$i];
-                                    $query = "INSERT INTO `social_flat`.`zonas_limpieza` (`ID_piso`, `nombre`) VALUES ('$idpiso', '$nombre');";
-                                    $res = mysql_query($query);
-                                }
-                            } else {
-                                $query = "UPDATE `social_flat`.`limpieza` SET inicio='$inicio',fin='$fin',frecuencia='$frecuencia' WHERE `ID_piso`='$idpiso'";
-                                $res = mysql_query($query);
-                                $result = mysql_query("SELECT nombre FROM `zonas_limpieza` WHERE `ID_piso`='$idpiso'");
-                                if ($zonas != 0) {
-                                    while ($zonaAux = mysql_fetch_row($result)) {
-                                        mysql_query("DELETE FROM `zonas_limpieza` WHERE ID_piso='$idpiso' AND nombre='$zonaAux[0]'");
-                                    }
-                                    for ($i = 0; $i < $zonas; $i++) {
-                                        $nombre = $zona[$i];
-                                        $query = "INSERT INTO `social_flat`.`zonas_limpieza` (`ID_piso`, `nombre`) VALUES ('$idpiso', '$nombre');";
-                                        $res = mysql_query($query);
-                                    }
-                                }
+                        ?><script type='text/javascript'> location.replace("preferencias.php");</script><?php
+                    }
+                    if (isset($_GET['borrarUsuario'])) {
+                        mysql_query("DELETE FROM `user` WHERE email='$email'");
+                        $result = mysql_query("SELECT email FROM `user` WHERE `id_piso`='$idpiso'");
+                        $nuevo = mysql_fetch_array($result);
+                        if ($nuevo) {
+                            $nuevoEmail = $nuevo['email'];
+                            mysql_query("UPDATE `social_flat`.`piso` SET creador='$nuevoEmail' WHERE `ID_piso`='$idpiso'");
+                        } else {
+                            mysql_query("DELETE FROM `piso` WHERE ID_piso='$idpiso'");
+                        }
+                        session_destroy();
+                        ?><script type='text/javascript'> location.replace("preferencias.php");</script><?php
+                    }
+                    if (isset($_POST['editarPiso'])) {
+                        $salt1 = '$%325cxwe2KK';
+                        $salt2 = 'asdad$&/&/&';
+                        $confPassword = md5($salt1 . filter_input(INPUT_POST, 'password', FILTER_SANITIZE_STRING) . $salt2);
+                        $result = mysql_query("SELECT password FROM `user` WHERE `email`='$email'");
+                        $password = mysql_fetch_array($result)[0];
+                        if ($confPassword === $password) {
+                            $validar = true;
+                            $nombre = filter_input(INPUT_POST, 'nombre', FILTER_SANITIZE_STRING);
+                            $num = filter_input(INPUT_POST, 'num', FILTER_VALIDATE_INT);
+                            $direccion = filter_input(INPUT_POST, 'direccion', FILTER_SANITIZE_STRING);
+                            $descripcion = filter_input(INPUT_POST, 'descripcion', FILTER_SANITIZE_STRING);
+                            if ($nombre === NULL || $nombre === FALSE || strlen($nombre) > 25) {
+                                $validar = FALSE;
+                                ?>
+                                <div class="error">Hay que especificar una nombre para el piso y debe ser menor de 25 caracteres.</div>
+                                <?php
                             }
-                            ?><script type='text/javascript'> location.replace("limpieza.php");</script><?php
+                            if ($num === NULL || $num === FALSE || $num < 0) {
+                                $validar = FALSE;
+                                ?>
+                                <div class="error">Hay entero positivo para el n&uacute;mero de personas.</div>
+                                <?php
+                            }
+                            if ($direccion === NULL || $direccion === FALSE || strlen($direccion) > 60) {
+                                $validar = FALSE;
+                                ?>
+                                <div class="error">Hay que especificar una direcci&oacute;n y debe ser menor de 60 caracteres.</div>
+                                <?php
+                            }
+                            if ($descripcion === NULL || $descripcion === FALSE || strlen($descripcion) > 200) {
+                                $validar = FALSE;
+                                ?>
+                                <div class="error">Hay que especificar una descripci&oacute;n y debe ser menor de 200 caracteres.</div>
+                                <?php
+                            }
+                            if ($validar) {
+                                mysql_query("UPDATE `social_flat`.`piso` SET nombre='$nombre',num_personas='$num',direccion='$direccion',descripcion='$descripcion' WHERE `ID_piso`='$idpiso'");
+                                ?>
+                                <div class="success">Piso modificado con &eacute;xito.</div>
+                                <?php
+                            }
+                        } else {
+                            ?>
+                            <div class="error">La contrase&ntilde;a no es v&aacute;lida.</div>
+                            <?php
                         }
                     }
+                    if (isset($_POST['editarNombre'])) {
+                        $salt1 = '$%325cxwe2KK';
+                        $salt2 = 'asdad$&/&/&';
+                        $confPassword = md5($salt1 . filter_input(INPUT_POST, 'password', FILTER_SANITIZE_STRING) . $salt2);
+                        $result = mysql_query("SELECT password FROM `user` WHERE `email`='$email'");
+                        $password = mysql_fetch_array($result)[0];
+                        if ($confPassword === $password) {
+                            $username = filter_input(INPUT_POST, 'nombre', FILTER_SANITIZE_STRING);
+                            if ($username === NULL || $username === FALSE || strlen($username) > 25 || strlen($username) < 5) {
+                                $validar = FALSE;
+                                ?>
+                                <div class="error">Hay que especificar una nombre entre 5 y 25 caracteres.</div>
+                                <?php
+                            } else {
+                                mysql_query("UPDATE `social_flat`.`user` SET username='$username' WHERE `email`='$email'");
+                                ?>
+                                <div class="success">Nombre modificado con &eacute;xito.</div>
+                                <?php
+                            }
+                        } else {
+                            ?>
+                            <div class="error">La contrase&ntilde;a no es v&aacute;lida.</div>
+                            <?php
+                        }
+                    }
+                    if (isset($_POST['cambiarPass'])) {
+                        $salt1 = '$%325cxwe2KK';
+                        $salt2 = 'asdad$&/&/&';
+                        $confPassword = md5($salt1 . filter_input(INPUT_POST, 'passAnt', FILTER_SANITIZE_STRING) . $salt2);
+                        $result = mysql_query("SELECT password FROM `user` WHERE `email`='$email'");
+                        $password = mysql_fetch_array($result)[0];
+                        if ($confPassword === $password) {
+                            $newPass = md5($salt1 . filter_input(INPUT_POST, 'newPass', FILTER_SANITIZE_STRING) . $salt2);
+                            $newPass2 = md5($salt1 . filter_input(INPUT_POST, 'confPass', FILTER_SANITIZE_STRING) . $salt2);
+                            if ($newPass === $newPass2) {
+                                mysql_query("UPDATE `social_flat`.`user` SET password='$newPass' WHERE `email`='$email'");
+                                ?>
+                                <div class="success">Contrase&ntilde;a modificada con &eacute;xito.</div>
+                                <?php
+                            } else {
+                                ?>
+                                <div class="error">Las contrase&ntilde;as no coinciden.</div>
+                                <?php
+                            }
+                        } else {
+                            ?>
+                            <div class="error">La contrase&ntilde;a no es v&aacute;lida.</div>
+                            <?php
+                        }
+                    }
+                    $result = mysql_query("SELECT username FROM `user` WHERE `email`='$email'");
+                    $username = mysql_fetch_array($result)[0];
+                    if (!$sinPiso) {
+                        $result2 = mysql_query("SELECT creador,nombre,num_personas,direccion,descripcion FROM `piso` WHERE `ID_piso`='$idpiso'");
+                        $piso = mysql_fetch_assoc($result2);
+                        $creador = $piso['creador'];
+                        $nombrePiso = $piso['nombre'];
+                        $direccion = $piso['direccion'];
+                        $descripcion = $piso['descripcion'];
+                        $num_personas = $piso['num_personas'];
+                    }
                     ?>
-                    <p onclick="confirmDel('¿Desea eliminar los turnos de limpieza?', 'limpieza.php?borrarLimpieza')" class="button">Eliminar turnos de limpieza</p>
-                    <p onclick="mostrarFormularioLimpieza()" class="button">Editar turnos de  limpieza</p>
-                    <form id = 'formularioLimpieza' action = '#' method = 'post'>
-                        <p>Especifica el inicio y fin de los turnos de limpieza.</p>
-                        Inicio: <input type = 'date' name = 'inicio' required="required"><br>
-                        Fin: <input type = 'date' name = 'fin'><br>
-                        <p>La frecuencia, en d&iacute;as, con la que se limpiar&aacute; el piso.</p>
-                        Frecuencia: <input type = 'number' name = 'frecuencia'><br>
-                        <p>N&uacute;mero de zonas a limpiar en el piso.</p>
-                        Zonas: <input type = 'number' id = 'zonas' name = 'zonas' value = '0' onchange = "aniadir_zonas(this)"><br>
-                        <input type='submit' value='Enviar' name='enviarLimpieza'>
-                    </form>
-                    <div id="calendar"></div>
+                    <a onclick="mostrarCuenta()" class="button">Mi cuenta</a>
+                    <a onclick="mostrarPiso()" class="button">Mi piso</a>
+                    <div id="datosUsuario">
+                        <p><strong>Nombre:</strong> <?php echo "$username"; ?></p>
+                        <p><strong>Email:</strong> <?php echo "$email"; ?></p>
+                        <ul>
+                            <li><a onclick="editarNombre()">Editar nombre</a></li>
+                            <li><a onclick="cambiarContrasenia()">Cambiar contrase&ntilde;a</a></li>
+                            <li><a onclick="confirmDel('¿Desea borrar su cuenta de forma definitiva?', 'preferencias.php?borrarUsuario')">Borrar Cuenta</a></li>
+                        </ul>
+                    </div>
+                    <?php if (!$sinPiso) { ?>
+                        <div id="datosPiso">
+                            <p><strong>Nombre del piso:</strong> <?php echo "$nombrePiso"; ?></p>
+                            <p><strong>N&uacute;mero de personas:</strong> <?php echo "$num_personas"; ?></p>
+                            <p><strong>Direcci&oacute;n:</strong> <?php echo "$direccion"; ?></p>
+                            <p><strong>Descripci&oacute;n:</strong> <?php echo "$descripcion"; ?></p>
+                            <ul>
+                                <?php if ($creador === $email) { ?>
+                                    <li><a onclick="editarPiso(<?php echo"'$nombrePiso'"; ?>,<?php echo"'$num_personas'"; ?>
+                                                    ,<?php echo"'$direccion'"; ?>,<?php echo"'$descripcion'"; ?>)">Editar piso</a></li>
+                                    <?php } ?>
+                                <li><a onclick="confirmDel('¿Desea salirse del piso?', 'preferencias.php?borrarPiso')">Salirse del piso</a></li>
+                            </ul>
+                        </div>
+                    <?php } else { ?>
+                        <p>&Uacute;nete a <a href="reg.php">un piso.</a></p>
+                    <?php } ?>
                 </div>
             </div>
             <?php include_once './includes/footer.html'; ?>
-
         </body>
+
     </html>
     <?php
 } else {

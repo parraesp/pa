@@ -20,12 +20,11 @@ if (isset($_SESSION['user'])) {
                 var zonas = [];
                 var nombres = [];
     <?php
-    if (isset($_GET['borrarLimpieza'])) {
-        borrarLimpieza($idpiso);
-    }
     if (isset($_SESSION['idpiso'])) {
         $idpiso = $_SESSION['idpiso'];
-
+        if (isset($_GET['borrarLimpieza'])) {
+            borrarLimpieza($idpiso);
+        }
         $result = mysql_query("SELECT * FROM `limpieza` WHERE `ID_piso`='$idpiso'");
         if (mysql_num_rows($result) > 0) {
             $datos = mysql_fetch_row($result);
@@ -96,7 +95,7 @@ if (isset($_SESSION['user'])) {
     ?>
             </script>
         </head>
-        <body class="right-sidebar" onload="<?php
+        <body class="no-sidebar" onload="<?php
         if (nuevo()) {
             header('Location: reg.php');
         }
@@ -180,16 +179,16 @@ if (isset($_SESSION['user'])) {
                         }
                     }
                     ?>
-                    <p onclick="mostrarFormularioLimpieza()" class="button">Editar turnos de  limpieza</p>
-                    <p onclick="confirmDel('¿Desea eliminar los turnos de limpieza?', 'limpieza.php?borrarLimpieza')" class="button">Eliminar turnos de limpieza</p>
+                    <a onclick="mostrarFormularioLimpieza()" class="button">Editar turnos de  limpieza</a>
+                    <a onclick="confirmDel('¿Desea eliminar los turnos de limpieza?', 'limpieza.php?borrarLimpieza')" class="button">Eliminar turnos de limpieza</a>
                     <form id = 'formularioLimpieza' action = '#' method = 'post'>
                         <p>Especifica el inicio y fin de los turnos de limpieza.</p>
-                        Inicio: <input type = 'date' name = 'inicio' required="required"><br>
-                        Fin: <input type = 'date' name = 'fin' required="required"><br>
+                        <label>Inicio: </label><input type = 'date' name = 'inicio' required="required"><br>
+                        <label>Fin: </label><input type = 'date' name = 'fin' required="required"><br>
                         <p>La frecuencia, en d&iacute;as, con la que se limpiar&aacute; el piso.</p>
-                        Frecuencia: <input type = 'number' name = 'frecuencia' required="required"><br>
+                        <label>Frecuencia: </label><input type = 'number' name = 'frecuencia' required="required"><br>
                         <p>N&uacute;mero de zonas a limpiar en el piso.</p>
-                        Zonas: <input type = 'number' id = 'zonas' name = 'zonas' value = '0' onchange = "aniadir_zonas(this)"><br>
+                        <label>Zonas: </label><input type = 'number' id = 'zonas' name = 'zonas' value = '0' onchange = "aniadir_zonas(this)"><br><br>
                         <input type='submit' value='Enviar' name='enviarLimpieza'>
                     </form>
                     <div id="calendar"></div>
