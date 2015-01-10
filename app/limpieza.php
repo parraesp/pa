@@ -120,7 +120,7 @@ if (isset($_SESSION['user'])) {
                         if ($zonas === NULL || $zonas === FALSE || $zonas < 0 || $zonas > 10) {
                             $validar = FALSE;
                             ?>
-                            <div class="error">Las zonas debe ser un entero positivo</div>.
+                            <div class="error">Las zonas debe ser un entero positivo</div>
                             <?php
                         } else {
                             for ($i = 0; $i < $zonas; $i++) {
@@ -128,25 +128,25 @@ if (isset($_SESSION['user'])) {
                                 if ($zona[$i] === NULL || $zona[$i] === FALSE) {
                                     $validar = FALSE;
                                     ?>
-                                    <div class="error">Las zona de limpieza debe una cadena de caract&eacute;res.</div>.
+                                    <div class="error">Las zona de limpieza debe una cadena de caract&eacute;res.</div>
                                     <?php
                                 }
                             }
                             if ($inicio === NULL || $inicio === FALSE || !checkdate($inicioArray[1], $inicioArray[2], $inicioArray[0])) {
                                 $validar = FALSE;
                                 ?>
-                                <div class="error">Las fecha de inicio debe seguir el formato aaaa-dd-mm.</div>.
+                                <div class="error">Las fecha de inicio debe ser v&aacute;lida.</div>
                                 <?php
                             }
                             if ($fin === NULL || $fin === FALSE || !checkdate($finArray[1], $finArray[2], $finArray[0]) || $fin < $inicio) {
                                 $validar = FALSE;
                                 ?>
-                                <div class="error">Las fecha de fin debe debe seguir el formato aaaa-dd-mm y ser mayor que la de inicio.</div>.
+                                <div class="error">Las fecha de fin debe ser mayor que la de inicio.</div>
                                 <?php
-                            }if ($frecuencia === NULL || $frecuencia === FALSE || $frecuencia < 0) {
+                            }if ($frecuencia === NULL || $frecuencia === FALSE || $frecuencia <= 0) {
                                 $validar = FALSE;
                                 ?>
-                                <div class="error">Las frecuencia debe ser un n&uacute;mero entero.</div>.
+                                <div class="error">Las frecuencia debe ser un n&uacute;mero entero positivo.</div>
                                 <?php
                             }
                         }
@@ -185,9 +185,9 @@ if (isset($_SESSION['user'])) {
                     <form id = 'formularioLimpieza' action = '#' method = 'post'>
                         <p>Especifica el inicio y fin de los turnos de limpieza.</p>
                         Inicio: <input type = 'date' name = 'inicio' required="required"><br>
-                        Fin: <input type = 'date' name = 'fin'><br>
+                        Fin: <input type = 'date' name = 'fin' required="required"><br>
                         <p>La frecuencia, en d&iacute;as, con la que se limpiar&aacute; el piso.</p>
-                        Frecuencia: <input type = 'number' name = 'frecuencia'><br>
+                        Frecuencia: <input type = 'number' name = 'frecuencia' required="required"><br>
                         <p>N&uacute;mero de zonas a limpiar en el piso.</p>
                         Zonas: <input type = 'number' id = 'zonas' name = 'zonas' value = '0' onchange = "aniadir_zonas(this)"><br>
                         <input type='submit' value='Enviar' name='enviarLimpieza'>
