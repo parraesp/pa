@@ -118,6 +118,6 @@ if (isset($_SESSION['user'])) {
     <?php
 } else {
     setcookie('auth', 'auth', time() + 7);
-    header('Location: ../entrar.php?auth = f');
+    header('Location: ../entrar.php?auth=f');
 }
 ?>

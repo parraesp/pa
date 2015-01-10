@@ -16,7 +16,7 @@ if (isset($_SESSION['user'])) {
         ?>">
 
             <!-- Header -->
-    <?php include_once './includes/nav.html'; ?>
+            <?php include_once './includes/nav.html'; ?>
 
             <!-- Main -->
             <div class="wrapper style1">
@@ -55,8 +55,8 @@ if (isset($_SESSION['user'])) {
                                 $mensaje = mysql_fetch_row($var);
                                 ?>
                                 <div class="info" onclick="mensaje('<?php echo $mensaje[1]; ?>', '<?php echo $mensaje[2]; ?>', '<?php echo $mensaje[3]; ?>', '<?php echo $mensaje[0]; ?>', '<?php echo $mensaje[5]; ?>')">&iexcl;Tienes nuevos mensajes!</div>
-    <?php }
-    ?>
+                            <?php }
+                            ?>
 
 
                         </div>
@@ -92,7 +92,7 @@ if (isset($_SESSION['user'])) {
 
             </div>
 
-    <?php include_once './includes/footer.html'; ?>
+            <?php include_once './includes/footer.html'; ?>
 
         </body>
     </html>
