@@ -128,10 +128,17 @@ if (isset($_SESSION['user'])) {
                             <section>
                                 <header>
                                     <h2>Su estatus</h2>
-                                    <h3><?php 
-                                    $resultado = mysql_query("SELECT `num_personas` FROM `piso` WHERE `ID_piso` LIKE '$piso'");
-                                    $numero = mysql_fetch_row($resultado);
-                                    echo number_format($total_balance/$numero[0],2)?>€</h3>
+                                    <h3><?php
+                                        $resultado = mysql_query("SELECT `num_personas` FROM `piso` WHERE `ID_piso` LIKE '$piso'");
+                                        $numero = mysql_fetch_row($resultado);
+                                        ?>
+                                        <div class="odometer"><?php echo number_format($total_balance / $numero[0], 2).'€';?></div>
+
+                                        <script>
+                                            setTimeout(function () {
+                                                $('.odometer').html(-424234);
+                                            }, 500);
+                                        </script></h3>
                                 </header>
 
                             </section>
@@ -141,7 +148,7 @@ if (isset($_SESSION['user'])) {
 
             </div>
 
-            <?php include_once './includes/footer.html'; ?>
+    <?php include_once './includes/footer.html'; ?>
 
         </body>
     </html>

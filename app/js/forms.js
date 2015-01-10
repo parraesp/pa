@@ -37,7 +37,7 @@ function terms() {
 function factura(estado, fecha, pagado, param) {
     var t = ' <img src="images/tick.png"><br>&iexcl;Haz click aqu&iacute; para marcar como pagado!' ;
     if(pagado != "No pagada"){
-        t = '<img src="images/cross.png">';
+        t = '<img src="images/cross.png"><br>Marcar como no pagado';
     }
     var k = '';
     if(param=='true'){
