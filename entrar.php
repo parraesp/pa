@@ -1,30 +1,14 @@
-<?php session_start(); ?>
+<?php
+session_start();
+include_once 'app/includes/functions.php';
+conectarBD();
+?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
         <title>Social Flat - Entrar</title>
-        <?php include_once 'app/includes/headers.html';
-        include_once 'app/includes/functions.php';
-        ?>
-        <?php
-        if (isset($_POST['email']) && isset($_POST['password'])) {
-            conectarBD();
-            $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
-            $salt1 = '$%325cxwe2KK';
-            $salt2 = 'asdad$&/&/&';
-            $password = md5($salt1 . filter_input(INPUT_POST, 'password', FILTER_SANITIZE_STRING) . $salt2);
-            $query = mysql_query("SELECT * FROM `user` WHERE `email` LIKE '$email' AND `password` LIKE '$password'");
-            if (mysql_num_rows($query) != 0) {
-                if (isset($_POST['recordar'])) {
-                    setcookie('recordar', $_POST['email'], time() + 30 * 3600 * 24);
-                    $_SESSION['user'] = $_POST['email'];
-                    $temp = mysql_fetch_array($query);
-                    $_SESSION['idpiso'] = $temp[4];
-                }
-                header('Location: app/home.php');
-            }
-        }
-        ?>
+        <?php include_once 'app/includes/headers.html'; ?>
+
     </head>
     <body class="right-sidebar">
         <div id="header">
@@ -41,12 +25,45 @@
             <div class="container">
                 <div class="row 200%">
                     <div class="8u" id="content">
-                        <?php if (isset($_COOKIE['exito']) && isset($_GET['reg'])) { ?>
+                        <?php
+                        if (isset($_POST['entrar'])) {
+                            $validar = true;
+                            $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+                            $salt1 = '$%325cxwe2KK';
+                            $salt2 = 'asdad$&/&/&';
+                            $password = md5($salt1 . filter_input(INPUT_POST, 'password', FILTER_SANITIZE_STRING) . $salt2);
+                            $query = mysql_query("SELECT * FROM `user` WHERE `email` LIKE '$email' AND `password` LIKE '$password'");
+                            if ($email === NULL || $email === FALSE) {
+                                $validar = FALSE;
+                                ?>
+                                <div class="error">Introduzca un email v&aacute;lido.</div>
+                                <?php
+                            }
+                            if ($password === NULL || $password === FALSE) {
+                                $validar = FALSE;
+                                ?>
+                                <div class="error">Introduzca una contrase&ntilde;a.</div>
+                                <?php
+                            }
+                            if ($validar) {
+                                if (mysql_num_rows($query) != 0) {
+                                    if (isset($_POST['recordar'])) {
+                                        setcookie('recordar', $email, time() + 30 * 3600 * 24);
+                                        $_SESSION['user'] = $email;
+                                        $temp = mysql_fetch_array($query);
+                                        $_SESSION['idpiso'] = $temp[4];
+                                    }
+                                    header('Location: app/home.php');
+                                } else {
+                                    ?><div class="error">&iexcl;Combinaci&oacute;n de usuario y contrase&ntilde;a incorrecta!</div><?php
+                                }
+                            }
+                        }
+                        if (isset($_COOKIE['exito']) && isset($_GET['reg'])) {
+                            ?>
                             <div class="success">&iexcl;Usuario creado con exito!</div>
                         <?php } else if (isset($_GET['auth'])) { ?>
                             <div class="warning">&iexcl;Tienes que logearte para acceder a tu cuenta!</div>
-                        <?php } else if (isset($_POST['email'])) {
-                            ?><div class="error">&iexcl;Combinaci&oacute;n de usuario y contrase&ntilde;a incorrecta!</div>
                             <?php
                         }
                         ?>
@@ -61,7 +78,7 @@
                             ?>"/><br/>
                             <label>Contrase&ntilde;a </label><input type="password" name="password"  id="password" required pattern=".{8,18}" maxlength="18" title="Debe tener de 8 a 18 caracteres"/>  <br/>
                             <label>&iquest;Recordar usuario?<input type="checkbox" checked name="recordar"/></label><br/>
-                            <input type="submit" value="Enviar">
+                            <input type="submit" name='entrar' value="Enviar">
                         </form>
 
                     </div>
@@ -91,6 +108,6 @@
                 </div>
             </div>
         </div>
-<?php include_once 'app/includes/footer.html'; ?>
+        <?php include_once 'app/includes/footer.html'; ?>
     </body>
 </html>

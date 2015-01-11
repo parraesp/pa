@@ -3,16 +3,15 @@ session_start();
 if (isset($_SESSION['user'])) {
     ?>
     <!DOCTYPE HTML>
-    <html>
+    <html xmlns="http://www.w3.org/1999/xhtml">
         <head>
             <title>Social Flat - Limpieza</title>
             <?php
-            mysql_connect('localhost', 'root', '');
-            mysql_select_db('social_flat');
+            include_once './includes/headers.html';
+            include_once './includes/functions.php';
+            conectarBD();
             ?>
-            <?php include_once './includes/headers.html'; ?>
-            <?php include_once './includes/functions.php'; ?>
-                        <script type="text/javascript">
+            <script type="text/javascript">
                 var zonas = [];
                 var nombres = [];
     <?php
@@ -96,7 +95,7 @@ if (isset($_SESSION['user'])) {
         }
         ?>">
             <!-- Header -->
-            <?php include_once './includes/nav.html'; ?>
+    <?php include_once './includes/nav.html'; ?>
             <!-- Main -->
 
             <div class="wrapper style1">
@@ -189,7 +188,7 @@ if (isset($_SESSION['user'])) {
                     <div id="calendar"></div>
                 </div>
             </div>
-            <?php include_once './includes/footer.html'; ?>
+    <?php include_once './includes/footer.html'; ?>
 
         </body>
     </html>

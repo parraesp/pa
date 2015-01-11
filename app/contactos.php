@@ -1,13 +1,14 @@
 <?php
 session_start();
 if (isset($_SESSION['user'])) {
+    include_once './includes/functions.php';
+    conectarBD()
     ?>
     <!DOCTYPE HTML>
     <html>
         <head>
             <title>Social Flat - Contactos</title>
             <?php include_once './includes/headers.html'; ?>
-            <?php include_once './includes/functions.php'; ?>
         </head>
         <body class="right-sidebar" onload="<?php
         if (nuevo()) {
@@ -25,25 +26,43 @@ if (isset($_SESSION['user'])) {
                         <div class="8u" id="content">
                             <?php
                             if (isset($_POST['editarContacto'])) {
-                                if (contactoSuyo($_POST['piso'])) {
-                                    $piso = $_POST['piso'];
-                                    $nombre = $_POST['nombre'];
-                                    $telefono = $_POST['tel'];
-                                    $email = $_POST['email'];
-                                    mysql_query("UPDATE `contacto` SET `nombre`='$nombre',`Telefono`=$telefono,`Email`='$email' WHERE `ID_contacto` LIKE '$piso'") or die(mysql_error());
+                                $piso = filter_input(INPUT_POST, 'piso', FILTER_SANITIZE_STRING);
+                                if (contactoSuyo($piso)) {
+                                    $validar = true;
+                                    $nombre = filter_input(INPUT_POST, 'nombre', FILTER_SANITIZE_STRING);
+                                    $telefono = filter_input(INPUT_POST, 'tel', FILTER_SANITIZE_STRING);
+                                    $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+                                    if ($email === NULL || $email === FALSE) {
+                                        $validar = FALSE;
+                                        ?>
+                                        <div class="error">Introduzca un email v&aacute;lido.</div>
+                                        <?php
+                                    }if ($nombre === NULL || $nombre === FALSE) {
+                                        $validar = FALSE;
+                                        ?>
+                                        <div class="error">Introduzca un nombre v&aacute;lido.</div>
+                                        <?php
+                                    }if ($telefono === NULL || $telefono === FALSE) {
+                                        $validar = FALSE;
+                                        ?>
+                                        <div class="error">Introduzca un tel&eacute;fono v&aacute;lido.</div>
+                                        <?php
+                                    }
+                                    if ($validar) {
+                                        mysql_query("UPDATE `contacto` SET `nombre`='$nombre',`Telefono`=$telefono,`Email`='$email' WHERE `ID_contacto` LIKE '$piso'") or die(mysql_error());
+                                    }
                                 }
                             }
-                            if(isset($_GET['erase']) && $_GET['id']){
-                                if(contactoSuyo($_GET['id'])){
-                                    $idef = $_GET['id'];
+                            if (isset($_GET['erase']) && isset($_GET['id'])) {
+                                $idef = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_STRING);
+                                if (contactoSuyo($idef)) {
                                     mysql_query("DELETE FROM `contacto` WHERE `ID_contacto` LIKE '$idef'");
                                 }
                             }
                             if (isset($_GET['edit']) || isset($_GET['delete'])) {
-
+                                $val = filter_input(INPUT_GET, 'edit', FILTER_SANITIZE_STRING);
                                 if (isset($_GET['edit'])) {
-                                    if (contactoSuyo($_GET['edit'])) {
-                                        $val = $_GET['edit'];
+                                    if (contactoSuyo($val)) {
                                         $res = mysql_query("SELECT * FROM `contacto` WHERE `ID_contacto` LIKE '$val'");
                                         $tmp = mysql_fetch_array($res);
                                         $piso = $tmp[0];
@@ -58,8 +77,8 @@ if (isset($_SESSION['user'])) {
                                     }
                                 }
                                 if (isset($_GET['delete'])) {
-                                    if (contactoSuyo($_GET['delete'])) {
-                                        $con = $_GET['delete'];
+                                    $con = filter_input(INPUT_GET, 'delete', FILTER_SANITIZE_STRING);
+                                    if (contactoSuyo($con)) {
                                         echo "<script type='text/javascript'>document.addEventListener('DOMContentLoaded', function() {if(confirm('¿Deseas borrar el contacto?')==true){window.location.href='contactos.php?erase=true&id=$con';}}, false);</script>";
                                     } else {
                                         ?>
@@ -70,26 +89,40 @@ if (isset($_SESSION['user'])) {
                             }
                             $piso = $_SESSION['idpiso'];
                             if (isset($_POST['contacto'])) {
-                                filter_input(FILTER_SANITIZE_STRING, $_POST['nombre']);
-                                mysql_connect('localhost', 'root', '');
-                                mysql_select_db('social_flat');
-                                $user = $_SESSION['user'];
-                                $nombre = $_POST['nombre'];
-                                $telefono = $_POST['tel'];
-                                $email = $_POST['email'];
-                                $sql = "INSERT INTO `contacto`(`ID_contacto`, `ID_piso`, `nombre`, `Telefono`, `Email`) VALUES (NULL, $piso,'$nombre','$telefono','$email')";
-                                mysql_query($sql) or die(mysql_error());
-                                ?>
-                                <div class="success">&iexcl;Contacto creado con exito!</div>
-                            <?php }
+                                $validar = true;
+                                $user = filter_input(INPUT_POST, 'user', FILTER_SANITIZE_STRING);
+                                $nombre = filter_input(INPUT_POST, 'nombre', FILTER_SANITIZE_STRING);
+                                $telefono = filter_input(INPUT_POST, 'tel', FILTER_SANITIZE_STRING);
+                                $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+                                if ($email === NULL || $email === FALSE) {
+                                    $validar = FALSE;
+                                    ?>
+                                    <div class="error">Introduzca un email v&aacute;lido.</div>
+                                    <?php
+                                }if ($nombre === NULL || $nombre === FALSE) {
+                                    $validar = FALSE;
+                                    ?>
+                                    <div class="error">Introduzca un nombre v&aacute;lido.</div>
+                                    <?php
+                                }if ($telefono === NULL || $telefono === FALSE) {
+                                    $validar = FALSE;
+                                    ?>
+                                    <div class="error">Introduzca un tel&eacute;fono v&aacute;lido.</div>
+                                    <?php
+                                }
+                                if ($validar) {
+                                    $sql = "INSERT INTO `contacto`(`ID_contacto`, `ID_piso`, `nombre`, `Telefono`, `Email`) VALUES (NULL, $piso,'$nombre','$telefono','$email')";
+                                    mysql_query($sql) or die(mysql_error());
+                                    ?>
+                                    <div class="success">&iexcl;Contacto creado con exito!</div>
+                                <?php }
+                            }
                             ?>
                             <header>
                                 <h2>Contactos</h2>
                             </header>
-                            <p onclick="crearContacto('<?php $_SESSION['idpiso']; ?>')" class="button">Crear Contacto</p>
+                            <a onclick="crearContacto('<?php $_SESSION['idpiso']; ?>')" class="button">Crear Contacto</a>
                             <?php
-                            mysql_connect('localhost', 'root', '');
-                            mysql_select_db('social_flat');
                             $user = $_SESSION['user'];
                             $query = "SELECT * FROM `contacto` WHERE `ID_piso` LIKE '$piso';";
                             $res = mysql_query($query);
