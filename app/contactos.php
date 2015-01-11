@@ -28,29 +28,10 @@ if (isset($_SESSION['user'])) {
                             if (isset($_POST['editarContacto'])) {
                                 $piso = filter_input(INPUT_POST, 'piso', FILTER_SANITIZE_STRING);
                                 if (contactoSuyo($piso)) {
-                                    $validar = true;
                                     $nombre = filter_input(INPUT_POST, 'nombre', FILTER_SANITIZE_STRING);
                                     $telefono = filter_input(INPUT_POST, 'tel', FILTER_SANITIZE_STRING);
-                                    $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
-                                    if ($email === NULL || $email === FALSE) {
-                                        $validar = FALSE;
-                                        ?>
-                                        <div class="error">Introduzca un email v&aacute;lido.</div>
-                                        <?php
-                                    }if ($nombre === NULL || $nombre === FALSE) {
-                                        $validar = FALSE;
-                                        ?>
-                                        <div class="error">Introduzca un nombre v&aacute;lido.</div>
-                                        <?php
-                                    }if ($telefono === NULL || $telefono === FALSE) {
-                                        $validar = FALSE;
-                                        ?>
-                                        <div class="error">Introduzca un tel&eacute;fono v&aacute;lido.</div>
-                                        <?php
-                                    }
-                                    if ($validar) {
-                                        mysql_query("UPDATE `contacto` SET `nombre`='$nombre',`Telefono`=$telefono,`Email`='$email' WHERE `ID_contacto` LIKE '$piso'") or die(mysql_error());
-                                    }
+                                    $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
+                                    mysql_query("UPDATE `contacto` SET `nombre`='$nombre',`Telefono`='$telefono',`Email`='$email' WHERE `ID_contacto` LIKE '$piso'") or die(mysql_error());
                                 }
                             }
                             if (isset($_GET['erase']) && isset($_GET['id'])) {
@@ -94,20 +75,10 @@ if (isset($_SESSION['user'])) {
                                 $nombre = filter_input(INPUT_POST, 'nombre', FILTER_SANITIZE_STRING);
                                 $telefono = filter_input(INPUT_POST, 'tel', FILTER_SANITIZE_STRING);
                                 $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
-                                if ($email === NULL || $email === FALSE) {
-                                    $validar = FALSE;
-                                    ?>
-                                    <div class="error">Introduzca un email v&aacute;lido.</div>
-                                    <?php
-                                }if ($nombre === NULL || $nombre === FALSE) {
+                                if ($nombre === NULL || $nombre === FALSE) {
                                     $validar = FALSE;
                                     ?>
                                     <div class="error">Introduzca un nombre v&aacute;lido.</div>
-                                    <?php
-                                }if ($telefono === NULL || $telefono === FALSE) {
-                                    $validar = FALSE;
-                                    ?>
-                                    <div class="error">Introduzca un tel&eacute;fono v&aacute;lido.</div>
                                     <?php
                                 }
                                 if ($validar) {
@@ -115,7 +86,8 @@ if (isset($_SESSION['user'])) {
                                     mysql_query($sql) or die(mysql_error());
                                     ?>
                                     <div class="success">&iexcl;Contacto creado con exito!</div>
-                                <?php }
+                                    <?php
+                                }
                             }
                             ?>
                             <header>
@@ -141,10 +113,8 @@ if (isset($_SESSION['user'])) {
                         </div>
                     </div>
                 </div>
-
             </div>
-
-    <?php include_once './includes/footer.html'; ?>
+            <?php include_once './includes/footer.html'; ?>
 
         </body>
     </html>

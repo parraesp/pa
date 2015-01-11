@@ -5,7 +5,7 @@ if (isset($_SESSION['user'])) {
     conectarBD();
     ?>
     <!DOCTYPE HTML>
-    <html>
+    <html xmlns="http://www.w3.org/1999/xhtml">
         <head>
             <title>Social Flat - Inicio</title>
             <?php include_once './includes/headers.html'; ?>
@@ -30,7 +30,7 @@ if (isset($_SESSION['user'])) {
                 echo "nombres[nombres.length]=" . json_encode($nombre) . ";";
             }
             ?>
-                        Date.prototype.addDays = function (days)
+                        Date.prototype.addDays = function(days)
                         {
                             var dat = new Date(this.valueOf());
                             dat.setDate(dat.getDate() + parseInt(days));
@@ -72,7 +72,7 @@ if (isset($_SESSION['user'])) {
                                     allDay: true};
                             }
                         }
-                        $(document).ready(function () {
+                        $(document).ready(function() {
                             $('#calendar').fullCalendar({
                                 events: eventos,
                                 aspectRatio: 1
@@ -89,11 +89,7 @@ if (isset($_SESSION['user'])) {
             header('Location: reg.php');
         }
         ?>">
-
-            <!-- Header -->
-            <?php include_once './includes/nav.html'; ?>
-
-            <!-- Main -->
+                  <?php include_once './includes/nav.html'; ?>
             <div class="wrapper style1">
                 <div class="container">
                     <div class="row 200%">
@@ -102,17 +98,15 @@ if (isset($_SESSION['user'])) {
                             <?php
                             $user = $_SESSION['user'];
                             if (isset($_GET['reject'])) {
-                                $id = $_GET['reject'];
-                                $var = mysql_query("SELECT * FROM `mensaje` WHERE `estado` LIKE '0' AND `destinatario` LIKE '$user' AND `id_mensaje` LIKE '$id' AND `id` LIKE '$id'");
+                                $id = filter_input(INPUT_GET, 'reject', FILTER_SANITIZE_STRING);
+                                $var = mysql_query("SELECT * FROM `mensaje` WHERE `estado` LIKE '0' AND `destinatario` LIKE '$user' AND `id_mensaje` LIKE '$id'");
                                 if (!is_bool($var)) {
                                     if (mysql_num_rows($var) == 1) {
                                         mysql_query("UPDATE `mensaje` SET `estado`='2'  WHERE `destinatario` LIKE '$user' AND `id_mensaje` LIKE '$id'");
                                     }
-                                } else {
-                                    echo "FRECH";
                                 }
                             } else if (isset($_GET['accept'])) {
-                                $id = $_GET['accept'];
+                                $id = filter_input(INPUT_GET, 'accept', FILTER_SANITIZE_STRING);
                                 $var = mysql_query("SELECT * FROM `mensaje` WHERE `estado` LIKE '0' AND `destinatario` LIKE '$user' AND `id_mensaje` LIKE '$id' ");
                                 if (!is_bool($var)) {
                                     if (mysql_num_rows($var) == 1) {
@@ -127,8 +121,6 @@ if (isset($_SESSION['user'])) {
                                         $res_datos_contacto = mysql_fetch_row($datos_contacto);
                                         mysql_query("INSERT INTO `contacto`(`ID_contacto`, `ID_piso`, `nombre`, `Telefono`, `Email`) VALUES (NULL, $data[0],'$res_datos_contacto[2]','-','$res_datos_contacto[1]')");
                                     }
-                                } else {
-                                    echo "FRECH";
                                 }
                             }
                             $var = mysql_query("SELECT * FROM `mensaje` WHERE `estado` LIKE '0' AND `destinatario` LIKE '$user'");
@@ -136,7 +128,8 @@ if (isset($_SESSION['user'])) {
                                 $mensaje = mysql_fetch_row($var);
                                 ?>
                                 <div class="info" onclick="mensaje('<?php echo $mensaje[1]; ?>', '<?php echo $mensaje[2]; ?>', '<?php echo $mensaje[3]; ?>', '<?php echo $mensaje[0]; ?>', '<?php echo $mensaje[5]; ?>')">&iexcl;Tienes nuevos mensajes!</div>
-                            <?php }
+                                <?php
+                            }
                             ?>
                             <a href="facturas.php"><div class="info">Tu balance asciende a <?php
                                     $piso = $_SESSION['idpiso'];
@@ -152,7 +145,7 @@ if (isset($_SESSION['user'])) {
                                             }
                                         }
                                     }
-                                    $resultado = mysql_query("SELECT `num_personas` FROM `piso` WHERE `ID_piso` LIKE '$piso'");
+                                    $resultado = mysql_query("SELECT COUNT(*) FROM `user` WHERE `id_piso` LIKE '$piso'");
                                     $numero = mysql_fetch_row($resultado);
                                     $divisor = $numero[0];
                                     if ($divisor == 0) {
@@ -162,18 +155,31 @@ if (isset($_SESSION['user'])) {
                                     ?> €</div></a>
                             <hr/>
                             <?php
-                            $companeros = mysql_query("SELECT * FROM `piso` WHERE `ID_piso` LIKE '$piso'");
+                            $companeros = mysql_query("SELECT * FROM `user` WHERE `ID_piso` LIKE '$piso'");
+                            $result2 = mysql_query("SELECT creador FROM `piso` WHERE `ID_piso`='$piso'");
+                            $creador = mysql_fetch_assoc($result2)['creador'];
+                            if (isset($_GET['borrarUsuario'])) {
+                                $id = filter_input(INPUT_GET, 'borrarUsuario', FILTER_SANITIZE_STRING);
+                                $resultAux = mysql_query("SELECT id_piso FROM `user` WHERE `ID_user`='$id'");
+                                $idpisoAux = mysql_fetch_assoc($resultAux)['id_piso'];
+                                if ($idpisoAux == $piso && $creador = $user) {
+                                    mysql_query("UPDATE `social_flat`.`user` SET id_piso='-1' WHERE `ID_user`='$id'");
+                                }
+                            }
                             ?>
                             <table class="default">
                                 <tr>
                                     <th>Miembro</th><th>&iquest;Expulsar?</th>
                                 </tr>
                                 <?php
-                                while ($companeros_array = mysql_fetch_array($companeros)) {
+                                while ($companeros_array = mysql_fetch_assoc($companeros)) {
                                     ?>
-                                <tr>
-                                    <td><?php echo $companeros_array[1]?></td><td></td>
-                                </tr>
+                                    <tr>
+                                        <td><?php echo $companeros_array['username'] ?></td>
+                                        <?php if ($creador === $user && $companeros_array['email'] != $user) { ?>
+                                            <td><a onclick="confirmDel('¿Desea expulsarlo del piso?', 'home.php?borrarUsuario=<?php echo $companeros_array['ID_user'] ?>')">Expulsar compa&ntilde;ero</a></td>
+                                        <?php } ?>                                    
+                                    </tr>
                                     <?php
                                 }
                                 ?>

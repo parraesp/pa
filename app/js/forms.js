@@ -29,15 +29,13 @@ function terms() {
                 + '<div>El usuario promete ser un noob</div>',
         player: "html",
         title: "Terminos y condiciones de servicio:",
-        height: 550,
-        width: 550
     });
 }
 
 function factura(estado, fecha, pagado, param) {
-    var t = ' <img src="images/tick.png"><br>&iexcl;Haz click aqu&iacute; para marcar como pagado!';
+    var t = ' <img src="images/tick.png"><br/>&iexcl;Haz click aqu&iacute; para marcar como pagado!';
     if (pagado != "No pagada") {
-        t = '<img src="images/cross.png"><br>Marcar como no pagado';
+        t = '<img src="images/cross.png"><br/>Marcar como no pagado';
     }
     var k = '';
     if (param == 'true') {
@@ -50,27 +48,23 @@ function factura(estado, fecha, pagado, param) {
                 + '<div style="text-align:center;"><a href="facturas.php?fec=' + fecha + '&pay=' + pagado.substr(0, 1) + '">' + t + '</a></div>',
         player: "html",
         title: "Ver Factura",
-        height: 250,
-        width: 250
     });
 }
 
 function crearFactura(user) {
     var tiempo = new Date();
     Shadowbox.open({
-        content: '<br><div>Detalles: </div>'
+        content: '<div>Detalles: </div>'
                 + '<p>Fecha: <strong>' + tiempo + '</strong></p>'
                 + '<form action="facturas.php" method="post">\n\
                 <input type="text" placeholder="Nombre de la factura" name="nombre" required>\n\
-                <input type="number" placeholder="P.Ej: 8,87" name="valor" required>€<br>\n\\n\
+                <input type="number" placeholder="P.Ej: 8,87" name="valor" required>€<br/>\n\
                                 <input type ="hidden" name="creador" value="' + user + '">\n\
                 <input type ="hidden" name="fecha" value="' + Math.floor(Date.now() / 1000) + '">\n\
                 <input type="submit" value="Enviar" name="gast">\n\
                 </form>',
         player: "html",
         title: 'Crear Factura',
-        height: 550,
-        width: 550,
         options: {enableKeys: false}
     });
 }
@@ -120,8 +114,6 @@ function contacto(id, nombre, telefono, email) {
                 + '<a href="contactos.php?delete=' + id + '"><img src="images/delete.png" style="width:20%;height:30%;"></a>',
         player: "html",
         title: "Contacto",
-        height: 150,
-        width: 250
     });
 }
 
@@ -131,13 +123,11 @@ function  mensaje(autor, receptor, fecha, id, cuerpo) {
                 + '<div>Receptor: ' + receptor + '</div>'
                 + '<div>Fecha: ' + new Date(fecha * 1000) + '</div>'
                 + '<div>Estado: ' + 'Pendiente' + '</div>'
-                + '<div>Mensaje:<br> ' + cuerpo + '</div>'
+                + '<div>Mensaje:<br/> ' + cuerpo + '</div>'
                 + '<div style="text-align:center;"><a href="home.php?accept=' + id + '"><img src="images/tick.png" style="width:20%;height:30%;"></a>'
-                + '<a href="home.php?reject=' + id + '"><img src="images/cross.png" style="width:20%;height:30%;"></a><br>Aceptar Rechazar</div>',
+                + '<a href="home.php?reject=' + id + '"><img src="images/cross.png" style="width:20%;height:30%;"></a><br/>Aceptar Rechazar</div>',
         player: "html",
         title: "Mensaje",
-        height: 350,
-        width: 350
     });
 }
 
@@ -147,15 +137,13 @@ function crearContacto(piso) {
         content: '<form action="contactos.php" method="post">\n\
                 Nombre <input type="text" placeholder="Nombre del contacto" name="nombre">\n\
                 Telefono <input type="text" placeholder="Telefono" name="tel">\n\
-                Email <input type="email" placeholder="Correo electr&oacute;nico" name="email"><br>\n\
+                Email <input type="email" placeholder="Correo electr&oacute;nico" name="email"><br/>\n\
                 <input type ="hidden" name="creador" value="' + piso + '">\n\
                 <input type ="hidden" name="fecha" value="' + Math.floor(Date.now() / 1000) + '">\n\
                 <input type="submit" value="Enviar" name="contacto">\n\
                 </form>',
         player: "html",
         title: 'Crear Contacto',
-        height: 550,
-        width: 550,
         options: {enableKeys: false}
     });
 }
@@ -165,14 +153,12 @@ function editarContacto(id, nombre, telefono, email) {
         content: '<form action="contactos.php" method="post">\n\
                 Nombre <input type="text"  name="nombre" value=' + nombre + '>\n\
                 Telefono <input type="text" name="tel" value=' + telefono + '>\n\
-                Email <input type="email" name="email" value=' + email + '><br>\n\
+                Email <input type="email" name="email" value=' + email + '><br/>\n\
                 <input type="hidden" name="piso" value=' + id + '>\n\
                 <input type="submit" value="Enviar" name="editarContacto">\n\
                 </form>',
         player: "html",
         title: 'Editar Contacto',
-        height: 550,
-        width: 550,
         options: {enableKeys: false}
     });
 }
@@ -180,20 +166,18 @@ function editarContacto(id, nombre, telefono, email) {
 
 function SendRequest(desc, dueno, user) {
     Shadowbox.open({
-        content: '<br><div>Descripci&oacute;n: </div>'
+        content: '<br/><div>Descripci&oacute;n: </div>'
                 + '<p>Due&ntilde;o <strong>' + dueno + '</strong></p>'
                 + '<p><em>' + desc + '</em></p>'
                 + '<div>&iquest;Es el piso que buscabas? &iexcl;M&aacute;ndale una solicitud!</div>'
                 + '<form action="reg.php" method="post">\n\
-                <textarea id="shadowbox_contenido" name="contenido" autofocus></textarea><br>\n\
+                <textarea id="shadowbox_contenido" name="contenido" autofocus></textarea><br/>\n\
                 <input type="submit" value="Enviar" name="solicitud">\n\
                 <input type ="hidden" name="autor" value="' + user + '">\n\
                 <input type ="hidden" name="recep" value="' + dueno + '">\n\
                 </form>',
         player: "html",
         title: 'Enviar solicitud',
-        height: 550,
-        width: 550,
         options: {enableKeys: false}
     });
 }
@@ -233,8 +217,6 @@ function editarNombre() {
                 </form>',
         player: "html",
         title: 'Editar nombre',
-        height: 550,
-        width: 550,
         options: {enableKeys: false}
     });
 }
@@ -249,8 +231,6 @@ function cambiarContrasenia() {
                 </form>',
         player: "html",
         title: 'Cambiar contrase&ntilde;a',
-        height: 550,
-        width: 550,
         options: {enableKeys: false}
     });
 }
@@ -267,8 +247,6 @@ function editarPiso(nombre, num, direccion, descripcion) {
                 </form>',
         player: "html",
         title: 'Editar Piso',
-        height: 550,
-        width: 550,
         options: {enableKeys: false}
     });
 }

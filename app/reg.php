@@ -1,13 +1,15 @@
 <?php
 session_start();
 if (isset($_SESSION['user'])) {
+    include_once './includes/functions.php';
+    conectarBD();
     ?>
     <!DOCTYPE HTML>
     <html>
         <head>
             <title>Social Flat</title>
             <?php include_once './includes/headers.html'; ?>
-            <?php include_once './includes/functions.php'; ?>
+
         </head>
         <body class="no-sidebar" onload="<?php
         if (!nuevo()) {
@@ -16,9 +18,7 @@ if (isset($_SESSION['user'])) {
         ?>">
 
             <!-- Header -->
-            <div id="header">				
                 <?php include_once './includes/nav.html'; ?>
-            </div>
             <!-- Main -->
             <div class="wrapper style1">
 
@@ -26,20 +26,30 @@ if (isset($_SESSION['user'])) {
                     <?php
                     if (isset($_POST['contenido']) || solicitud()) {
                         if (!solicitud()) {
-                            filter_input(FILTER_SANITIZE_STRING, $_POST['contenido']);
+                            $ban = true;
                             $user = $_SESSION['user'];
-                            $dest = $_POST['recep'];
-                            $cuerpo = $_POST['contenido'];
+                            $dest = filter_input(INPUT_POST, 'recep', FILTER_SANITIZE_STRING);
+                            $cuerpo = filter_input(INPUT_POST, 'contenido', FILTER_SANITIZE_STRING);
                             $fecha = time();
-                            $query = "INSERT INTO `social_flat`.`mensaje` (`id_mensaje`, `autor`, `destinatario`, `fecha`, `estado`, `cuerpo`) VALUES (NULL, '$user', '$dest', '$fecha', '0', '$cuerpo');";
-                            $conexion = mysql_connect("localhost", "root", "");
-                            mysql_select_db('social_flat', $conexion);
-                            mysql_query($query);
+                            if ($dest === NULL || $dest === FALSE) {
+                                ?>
+                                <div class="error">El destinatario debe ser v&aacute;lido.</div>
+                                <?php
+                                $ban = false;
+                            }
+                            if ($cuerpo === NULL || $cuerpo === FALSE) {
+                                ?>
+                                <div class="error">El contenido debe ser v&aacute;lido.</div>
+                                <?php
+                                $ban = false;
+                            }
+                            if ($ban) {
+                                $query = "INSERT INTO `social_flat`.`mensaje` (`id_mensaje`, `autor`, `destinatario`, `fecha`, `estado`, `cuerpo`) VALUES (NULL, '$user', '$dest', '$fecha', '0', '$cuerpo');";
+                                mysql_query($query);
+                            }
                         }
                         if (isset($_GET['can'])) {
                             $user = $_SESSION['user'];
-                            $conexion = mysql_connect("localhost", "root", "");
-                            mysql_select_db('social_flat', $conexion);
                             mysql_query("DELETE FROM `mensaje` WHERE `autor` LIKE '$user'");
                             header('Location: reg.php');
                         }
@@ -47,9 +57,11 @@ if (isset($_SESSION['user'])) {
                         <div class="8u info" id="content">Tu solicitud ha sido enviada y est&aacute; a la espera de respuesta. Te rogamos paciencia.</div>
                         <div class="8u info" id="content">Puedes cancelar tu solicitud haciendo click <a href='?can=nao'>aqu&iacute;</a></div>
                         <script type="text/javascript">
-                            window.setTimeout(function () {window.location="reg.php";}, 5000);
+                            window.setTimeout(function() {
+                                window.location = "reg.php";
+                            }, 5000);
                         </script>
-                    <?php } else if (!isset($_POST['contenido'])) { ?>
+    <?php } else if (!isset($_POST['contenido'])) { ?>
                         <div class="8u info" id="content">Elija una de las siguientes opciones</div>
                         <div class="row">
 
@@ -67,12 +79,12 @@ if (isset($_SESSION['user'])) {
                             </article>
 
                         </div>
-                    <?php } ?>
+    <?php } ?>
                 </div>
 
             </div>
 
-            <?php include_once './includes/footer.html'; ?>
+    <?php include_once './includes/footer.html'; ?>
         </body>
     </html>
     <?php

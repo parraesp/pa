@@ -2,15 +2,20 @@
 session_start();
 include_once 'includes/functions.php';
 if (isset($_SESSION['user'])) {
+    conectarBD();
     ?>
     <!DOCTYPE HTML>
-    <html>
+    <html xmlns="http://www.w3.org/1999/xhtml">
         <head>
             <title>Social Flat - Inicio</title>
             <?php include_once './includes/headers.html';
             ?>
         </head>
-        <body class="right-sidebar">
+        <body class="right-sidebar" onload="<?php
+        if (!nuevo()) {
+            header('Location: home.php');
+        }
+        ?>">
             <!-- Header -->
             <?php include_once './includes/nav.html'; ?>
             <?php
@@ -25,32 +30,32 @@ if (isset($_SESSION['user'])) {
                     <div class="row 200%">
                         <div class="8u" id="content">
                             <?php
-                            if (isset($_POST['name']) && isset($_POST['personas']) && isset($_POST['direccion']) && isset($_POST['descripcion'])) {
+                            if (isset($_POST['crearPiso'])) {
                                 $ban = true;
-                                filter_input(FILTER_SANITIZE_STRING, $_POST['name']);
-                                filter_input(FILTER_VALIDATE_INT, $_POST['personas']);
-                                filter_input(FILTER_SANITIZE_STRING, $_POST['direccion']);
-                                filter_input(FILTER_SANITIZE_STRING, $_POST['descripcion']);
-                                if (strlen($_POST['name']) < 5 || strlen($_POST['name']) > 25) {
+                                $name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
+                                $num_personas = filter_input(INPUT_POST, 'personas', FILTER_VALIDATE_INT);
+                                $direccion = filter_input(INPUT_POST, 'direccion', FILTER_SANITIZE_STRING);
+                                $descripcion = filter_input(INPUT_POST, 'descripcion', FILTER_SANITIZE_STRING);
+                                if ($name === NULL || $name === FALSE || strlen($name) < 5 || strlen($name) > 25) {
                                     ?>
                                     <div class="error">&iexcl;El nombre debe tener entre 5 y 25 caracteres!</div>
                                     <?php
                                     $ban = false;
                                 }
-                                if (!is_numeric($_POST['personas']) || !preg_match('/^\d+$/', $_POST['personas']) || $_POST['personas'] < 0) {
+                                if ($num_personas === NULL || $num_personas === FALSE || $num_personas < 0) {
                                     ?>
-                                    <div class="error">&iexcl;Numero de personas tiene que ser un n&uacute;mero entero positivo!</div>
+                                    <div class="error">&iexcl;N&uacute;mero de personas tiene que ser un n&uacute;mero entero positivo!</div>
                                     <?php
                                     $ban = false;
-                                } if (strlen($_POST['direccion']) < 5 || strlen($_POST['direccion']) > 60) {
+                                } if ($direccion === NULL || $direccion === FALSE || strlen($direccion) > 60) {
                                     ?>
-                                    <div class="error">&iexcl;La direccii&oacute;n debe tener entre 15 y 60 caracteres!</div>
+                                    <div class="error">&iexcl;La direccii&oacute;n debe tener como mucho 60 caracteres!</div>
                                     <?php
                                     $ban = false;
                                 }
-                                if (strlen($_POST['descripcion']) < 0 || strlen($_POST['descripcion']) > 200) {
+                                if ($descripcion === NULL || $descripcion === FALSE || strlen($descripcion) > 200) {
                                     ?>
-                                    <div class="error">&iexcl;La descripci&oacute;n debe tener entre 25 y 200 caracteres!</div>
+                                    <div class="error">&iexcl;La descripci&oacute;n debe tener como mucho 200 caracteres!</div>
                                     <?php
                                     $ban = false;
                                 }
@@ -62,14 +67,7 @@ if (isset($_SESSION['user'])) {
                                     $ban = false;
                                 }
                                 if ($ban) {
-                                    // A guardar!
-                                    $conexion = mysql_connect("localhost", "root", "");
-                                    mysql_select_db('social_flat', $conexion);
                                     $creador = $_SESSION['user'];
-                                    $nombre = $_POST['name'];
-                                    $num_personas = $_POST['personas'];
-                                    $direccion = $_POST['direccion'];
-                                    $descripcion = $_POST['descripcion'];
                                     $coordenadas = explode(' ', $_POST['coords']);
                                     $longitud = $coordenadas[0];
                                     $latitud = $coordenadas[1];
@@ -114,68 +112,63 @@ if (isset($_SESSION['user'])) {
                                     echo $_POST['personas'];
                                 }
                                 ?>' placeholder="N&uacute;mero de personas" required oninput=""/><br/>
-                                <label>Direcci&oacute;n </label><textarea  name="direccion" placeholder="Direcci&oacute;n f&iacute;sica del piso" required pattern=".{15,60}" title="Debe tener de 15 a 60 caracteres"/><?php
-                                if (isset($_POST['direccion'])) {
-                                    echo $_POST['direccion'];
-                                }
-                                ?></textarea><br/>
+                                <label>Direcci&oacute;n </label><textarea  name="direccion" placeholder="Direcci&oacute;n f&iacute;sica del piso"><?php
+                                    if (isset($_POST['direccion'])) {
+                                        echo $_POST['direccion'];
+                                    }
+                                    ?></textarea><br/>
                                 <label>Descripci&oacute;n</label><textarea  name="descripcion"
-                                                                            placeholder="Descripci&oacute;n p&uacute;blica del piso" required pattern=".{25,200}" title="Debe tener de 25 a 200 caracteres" value='<?php
-                                                                            if (isset($_POST['descripcion'])) {
-                                                                                echo $_POST['descripcion'];
-                                                                            }
-                                                                            ?>'/><?php
-                                                                            if (isset($_POST['descripcion'])) {
-                                                                                echo $_POST['descripcion'];
-                                                                            }
-                                                                            ?></textarea><br/>
+                                                                            placeholder="Descripci&oacute;n p&uacute;blica del piso"><?php
+                                                                                if (isset($_POST['descripcion'])) {
+                                                                                    echo $_POST['descripcion'];
+                                                                                }
+                                                                                ?></textarea><br/>
                                 <input type="hidden" name="coords"  id="coord" value="<?php
                                 if (isset($_POST['coords'])) {
                                     echo $_POST['coords'];
                                 }
                                 ?>"/>
-                                <input type="submit" value="Enviar">
-                                <form>
+                                <input type="submit" name="crearPiso" value="Enviar">
+                            </form>
+                        </div>
+                        <div class="4u" id="sidebar">
+                            <hr class="first" />
+                            <section>
+                                <header>
+                                    <h3>&iquest;Qu&eacute; datos son importantes?</h3>
+                                </header>
+                                <p>
+                                    Una vez rellenado el formulario y que tengas tu piso
+                                    podr&aacute;s a&ntilde;adir m&aacute;s datos como contactos
+                                    de interes del piso, una descripci&oacute;n del piso que ser&aacute;
+                                    vista cuando se busque el piso, etc.
+                                </p>
+                            </section>
+                            <hr />  
+                            <section>
+                                <header>
+                                    <h3><strong>ATENCI&Oacute;N</strong></h3>
+                                </header>
+                                <p>
+                                    &iexcl;Es fundamental permitir el acceso a la geolocalizaci&oacute;n
+                                    a Social Flat para detectar donde est&aacute; el piso!
+                                </p>    
+                            </section>
+                        </div>
+                    </div>
+                </div>
 
-                                    </div>
-                                    <div class="4u" id="sidebar">
-                                        <hr class="first" />
-                                        <section>
-                                            <header>
-                                                <h3>&iquest;Qu&eacute; datos son importantes?</h3>
-                                            </header>
-                                            <p>
-                                                Una vez rellenado el formulario y que tengas tu piso
-                                                podr&aacute;s a&ntilde;adir m&aacute;s datos como contactos
-                                                de interes del piso, una descripci&oacute;n del piso que ser&aacute;
-                                                vista cuando se busque el piso, etc.
-                                            </p>
-                                        </section>
-                                        <hr />  
-                                        <section>
-                                            <header>
-                                                <h3><strong>ATENCI&Oacute;N</strong></h3>
-                                            </header>
-                                            <p>
-                                                &iexcl;Es fundamental permitir el acceso a la geolocalizaci&oacute;n
-                                                a Social Flat para detectar donde est&aacute; el piso!
-                                            </p>    
-                                        </section>
-                                    </div>
-                                    </div>
-                                    </div>
+            </div>
 
-                                    </div>
+            <?php include_once './includes/footer.html'; ?>
 
-    <?php include_once './includes/footer.html'; ?>
-
-                                    </body>
-                                    </html>
-                                    <?php
-                                } else if (!nuevo()) {
-                                    header('Location: home.php');
-                                } else {
-                                    setcookie('auth', 'auth', time() + 7);
-                                    header('Location: ../entrar.php?auth=f');
-                                }
-                                ?>
+        </body>
+    </html>
+    <?php
+} else if (!nuevo()) {
+    header('Location: home.php');
+} else {
+    setcookie('auth', 'auth', time() + 7);
+    header('Location: ../entrar.php?auth=f');
+}
+?>
