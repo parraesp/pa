@@ -1,8 +1,14 @@
 <?php
+
 print_r($_SESSION);
-if(isset($_GET['exit'])){
-        session_destroy();
-        header("Location: ../entrar.php");
+if (isset($_GET['exit'])) {
+    session_destroy();
+    header("Location: ../entrar.php");
+}
+
+function conectarBD() {
+    $conexion = mysql_connect("localhost", "root", "");
+    mysql_select_db('social_flat', $conexion);
 }
 
 function nuevo() {
