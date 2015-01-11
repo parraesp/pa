@@ -1,9 +1,7 @@
 <?php
-
-print_r($_SESSION);
-if (isset($_GET['exit'])) {
-    session_destroy();
-    header("Location: ../entrar.php");
+if(isset($_GET['exit'])){
+        session_destroy();
+        header("Location: ../entrar.php");
 }
 
 function conectarBD() {
