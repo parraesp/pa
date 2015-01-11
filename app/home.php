@@ -30,7 +30,7 @@ if (isset($_SESSION['user'])) {
                 echo "nombres[nombres.length]=" . json_encode($nombre) . ";";
             }
             ?>
-                        Date.prototype.addDays = function(days)
+                        Date.prototype.addDays = function (days)
                         {
                             var dat = new Date(this.valueOf());
                             dat.setDate(dat.getDate() + parseInt(days));
@@ -72,7 +72,7 @@ if (isset($_SESSION['user'])) {
                                     allDay: true};
                             }
                         }
-                        $(document).ready(function() {
+                        $(document).ready(function () {
                             $('#calendar').fullCalendar({
                                 events: eventos,
                                 aspectRatio: 1
@@ -152,7 +152,6 @@ if (isset($_SESSION['user'])) {
                                             }
                                         }
                                     }
-
                                     $resultado = mysql_query("SELECT `num_personas` FROM `piso` WHERE `ID_piso` LIKE '$piso'");
                                     $numero = mysql_fetch_row($resultado);
                                     $divisor = $numero[0];
@@ -161,7 +160,25 @@ if (isset($_SESSION['user'])) {
                                     }
                                     echo number_format($total_balance / $divisor, 2);
                                     ?> €</div></a>
-                            <?php ?>
+                            <hr/>
+                            <?php
+                            $companeros = mysql_query("SELECT * FROM `piso` WHERE `ID_piso` LIKE '$piso'");
+                            ?>
+                            <table class="default">
+                                <tr>
+                                    <th>Miembro</th><th>&iquest;Expulsar?</th>
+                                </tr>
+                                <?php
+                                while ($companeros_array = mysql_fetch_array($companeros)) {
+                                    ?>
+                                <tr>
+                                    <td><?php echo $companeros_array[1]?></td><td></td>
+                                </tr>
+                                    <?php
+                                }
+                                ?>
+                            </table>
+
 
                         </div>
                         <div class="4u" id="sidebar">

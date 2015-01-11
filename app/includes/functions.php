@@ -7,7 +7,6 @@ if(isset($_GET['exit'])){
 function conectarBD() {
     $conexion = mysql_connect("localhost", "root", "");
     mysql_select_db('social_flat', $conexion);
->>>>>>> origin/master
 }
 
 function nuevo() {
