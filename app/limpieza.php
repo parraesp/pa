@@ -12,10 +12,6 @@ if (isset($_SESSION['user'])) {
             ?>
             <?php include_once './includes/headers.html'; ?>
             <?php include_once './includes/functions.php'; ?>
-            <link rel='stylesheet' href='./js/fullcalendar/fullcalendar.css' />
-            <script src='./js/fullcalendar/lib/moment.min.js'></script>
-            <script src='./js/fullcalendar/fullcalendar.js'></script>
-            <script src='./js/fullcalendar/lang/es.js'></script>
                         <script type="text/javascript">
                 var zonas = [];
                 var nombres = [];
