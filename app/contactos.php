@@ -3,7 +3,7 @@ session_start();
 if (isset($_SESSION['user'])) {
     ?>
     <!DOCTYPE HTML>
-    <html>
+    <html xmlns="http://www.w3.org/1999/xhtml">
         <head>
             <title>Social Flat - Contactos</title>
             <?php include_once './includes/headers.html'; ?>
