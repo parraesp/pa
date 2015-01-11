@@ -102,17 +102,15 @@ if (isset($_SESSION['user'])) {
                             <?php
                             $user = $_SESSION['user'];
                             if (isset($_GET['reject'])) {
-                                $id = $_GET['reject'];
+                                $id = filter_input(INPUT_GET, 'reject', FILTER_SANITIZE_STRING);
                                 $var = mysql_query("SELECT * FROM `mensaje` WHERE `estado` LIKE '0' AND `destinatario` LIKE '$user' AND `id_mensaje` LIKE '$id' AND `id` LIKE '$id'");
                                 if (!is_bool($var)) {
                                     if (mysql_num_rows($var) == 1) {
                                         mysql_query("UPDATE `mensaje` SET `estado`='2'  WHERE `destinatario` LIKE '$user' AND `id_mensaje` LIKE '$id'");
                                     }
-                                } else {
-                                    echo "FRECH";
                                 }
                             } else if (isset($_GET['accept'])) {
-                                $id = $_GET['accept'];
+                                $id = filter_input(INPUT_GET, 'accept', FILTER_SANITIZE_STRING);
                                 $var = mysql_query("SELECT * FROM `mensaje` WHERE `estado` LIKE '0' AND `destinatario` LIKE '$user' AND `id_mensaje` LIKE '$id' ");
                                 if (!is_bool($var)) {
                                     if (mysql_num_rows($var) == 1) {
@@ -127,16 +125,14 @@ if (isset($_SESSION['user'])) {
                                         $res_datos_contacto = mysql_fetch_row($datos_contacto);
                                         mysql_query("INSERT INTO `contacto`(`ID_contacto`, `ID_piso`, `nombre`, `Telefono`, `Email`) VALUES (NULL, $data[0],'$res_datos_contacto[2]','-','$res_datos_contacto[1]')");
                                     }
-                                } else {
-                                    echo "FRECH";
                                 }
+                                $var = mysql_query("SELECT * FROM `mensaje` WHERE `estado` LIKE '0' AND `destinatario` LIKE '$user'");
+                                if (mysql_num_rows($var) > 0) {
+                                    $mensaje = mysql_fetch_row($var);
+                                    ?>
+                                    <div class="info" onclick="mensaje('<?php echo $mensaje[1]; ?>', '<?php echo $mensaje[2]; ?>', '<?php echo $mensaje[3]; ?>', '<?php echo $mensaje[0]; ?>', '<?php echo $mensaje[5]; ?>')">&iexcl;Tienes nuevos mensajes!</div>
+                                <?php }
                             }
-                            $var = mysql_query("SELECT * FROM `mensaje` WHERE `estado` LIKE '0' AND `destinatario` LIKE '$user'");
-                            if (mysql_num_rows($var) > 0) {
-                                $mensaje = mysql_fetch_row($var);
-                                ?>
-                                <div class="info" onclick="mensaje('<?php echo $mensaje[1]; ?>', '<?php echo $mensaje[2]; ?>', '<?php echo $mensaje[3]; ?>', '<?php echo $mensaje[0]; ?>', '<?php echo $mensaje[5]; ?>')">&iexcl;Tienes nuevos mensajes!</div>
-                            <?php }
                             ?>
                             <a href="facturas.php"><div class="info">Tu balance asciende a <?php
                                     $piso = $_SESSION['idpiso'];
@@ -161,7 +157,7 @@ if (isset($_SESSION['user'])) {
                                     }
                                     echo number_format($total_balance / $divisor, 2);
                                     ?> €</div></a>
-                            <?php ?>
+    <?php ?>
 
                         </div>
                         <div class="4u" id="sidebar">
@@ -173,7 +169,7 @@ if (isset($_SESSION['user'])) {
 
             </div>
 
-            <?php include_once './includes/footer.html'; ?>
+    <?php include_once './includes/footer.html'; ?>
 
         </body>
     </html>
