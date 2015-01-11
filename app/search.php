@@ -5,12 +5,16 @@ if (isset($_SESSION['user'])) {
     conectarBD();
     ?>
     <!DOCTYPE HTML>
-    <html>
+    <html xmlns="http://www.w3.org/1999/xhtml">
         <head>
             <title>Social Flat - Buscar piso</title>
             <?php include_once './includes/headers.html'; ?>
         </head>
-        <body class="right-sidebar">
+        <body class="right-sidebar" onload="<?php
+        if (!nuevo()) {
+            header('Location: home.php');
+        }
+        ?>">
             <!-- Header -->
             <?php include_once './includes/nav.html'; ?>
             <?php
@@ -78,18 +82,18 @@ if (isset($_SESSION['user'])) {
                                         for ($i = 0; $i < count($pisos_2return); $i++) {
                                             ?>
                                             <tr><td onclick="SendRequest('<?php echo $pisos_2return[$i][5] ?>', '<?php echo $pisos_2return[$i][1] ?>', '<?php echo $_SESSION['user']; ?>');"><?php echo $pisos_2return[$i][1]; ?></td><td><?php echo $pisos_2return[$i][2]; ?></td><td><?php echo $pisos_2return[$i][3]; ?></td><td style="overflow: hidden; text-overflow-mode: "><?php echo $pisos_2return[$i][4]; ?></td><td><?php echo $pisos_2return[$i][9]; ?></td></tr>
-                                            <?php
-                                        }
-                                    }/* else{echo '<tr><td>-------Ning&uacute;n piso que coincida con los datos insertados------</td></tr>';} */
-                                    ?>
+                                                    <?php
+                                                }
+                                            }/* else{echo '<tr><td>-------Ning&uacute;n piso que coincida con los datos insertados------</td></tr>';} */
+                                            ?>
                                 </table>
-                                        <?php } ?>
+                            <?php } ?>
                             <form action="#" method="post">
                                 <label>Nombre </label><input type="text" name="name" value='<?php
-                            if (isset($_POST['name'])) {
-                                echo $_POST['name'];
-                            }
-                            ?>' placeholder="Nombre del piso" pattern=".{5,25}" title="Debe tener de 5 a 25 caracteres"/>
+                                if (isset($_POST['name'])) {
+                                    echo $_POST['name'];
+                                }
+                                ?>' placeholder="Nombre del piso" pattern=".{5,25}" title="Debe tener de 5 a 25 caracteres"/>
                                 <label>Ciudad </label><input type="text" name="ciudad" value='<?php
                                 if (isset($_POST['ciudad'])) {
                                     echo $_POST['ciudad'];
@@ -106,18 +110,15 @@ if (isset($_SESSION['user'])) {
                                 }
                                 ?>' placeholder="N&uacute;mero de personas" oninput=""/><br/><br/>
                                 <input type="submit" name='search' value="Enviar">
-                                <form>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <?php include_once './includes/footer.html'; ?>
 
-                                    </div>
-                                    </div>
-                                    </div>
-
-                                    </div>
-
-    <?php include_once './includes/footer.html'; ?>
-
-                                    </body>
-                                    </html>
+        </body>
+    </html>
     <?php
 } else if (!nuevo()) {
     header('Location: home.php');

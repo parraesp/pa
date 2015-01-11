@@ -18,9 +18,7 @@ if (isset($_SESSION['user'])) {
         ?>">
 
             <!-- Header -->
-            <div id="header">				
                 <?php include_once './includes/nav.html'; ?>
-            </div>
             <!-- Main -->
             <div class="wrapper style1">
 
@@ -33,15 +31,15 @@ if (isset($_SESSION['user'])) {
                             $dest = filter_input(INPUT_POST, 'recep', FILTER_SANITIZE_STRING);
                             $cuerpo = filter_input(INPUT_POST, 'contenido', FILTER_SANITIZE_STRING);
                             $fecha = time();
-                            if ($nombre === NULL || $nombre === FALSE) {
+                            if ($dest === NULL || $dest === FALSE) {
                                 ?>
-                                <div class="error">El nombre debe ser v&aacute;lido.</div>
+                                <div class="error">El destinatario debe ser v&aacute;lido.</div>
                                 <?php
                                 $ban = false;
                             }
-                            if ($valor === NULL || $valor === FALSE) {
+                            if ($cuerpo === NULL || $cuerpo === FALSE) {
                                 ?>
-                                <div class="error">El valor debe ser v&aacute;lido.</div>
+                                <div class="error">El contenido debe ser v&aacute;lido.</div>
                                 <?php
                                 $ban = false;
                             }

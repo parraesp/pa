@@ -5,13 +5,17 @@ if (isset($_SESSION['user'])) {
     conectarBD();
     ?>
     <!DOCTYPE HTML>
-    <html>
+    <html xmlns="http://www.w3.org/1999/xhtml">
         <head>
             <title>Social Flat - Inicio</title>
             <?php include_once './includes/headers.html';
             ?>
         </head>
-        <body class="right-sidebar">
+        <body class="right-sidebar" onload="<?php
+        if (!nuevo()) {
+            header('Location: home.php');
+        }
+        ?>">
             <!-- Header -->
             <?php include_once './includes/nav.html'; ?>
             <?php
@@ -108,68 +112,63 @@ if (isset($_SESSION['user'])) {
                                     echo $_POST['personas'];
                                 }
                                 ?>' placeholder="N&uacute;mero de personas" required oninput=""/><br/>
-                                <label>Direcci&oacute;n </label><textarea  name="direccion" placeholder="Direcci&oacute;n f&iacute;sica del piso" required pattern=".{15,60}" title="Debe tener de 15 a 60 caracteres"/><?php
-                                if (isset($_POST['direccion'])) {
-                                    echo $_POST['direccion'];
-                                }
-                                ?></textarea><br/>
+                                <label>Direcci&oacute;n </label><textarea  name="direccion" placeholder="Direcci&oacute;n f&iacute;sica del piso"><?php
+                                    if (isset($_POST['direccion'])) {
+                                        echo $_POST['direccion'];
+                                    }
+                                    ?></textarea><br/>
                                 <label>Descripci&oacute;n</label><textarea  name="descripcion"
-                                                                            placeholder="Descripci&oacute;n p&uacute;blica del piso" required pattern=".{25,200}" title="Debe tener de 25 a 200 caracteres" value='<?php
-                                                                            if (isset($_POST['descripcion'])) {
-                                                                                echo $_POST['descripcion'];
-                                                                            }
-                                                                            ?>'/><?php
-                                                                            if (isset($_POST['descripcion'])) {
-                                                                                echo $_POST['descripcion'];
-                                                                            }
-                                                                            ?></textarea><br/>
+                                                                            placeholder="Descripci&oacute;n p&uacute;blica del piso"><?php
+                                                                                if (isset($_POST['descripcion'])) {
+                                                                                    echo $_POST['descripcion'];
+                                                                                }
+                                                                                ?></textarea><br/>
                                 <input type="hidden" name="coords"  id="coord" value="<?php
                                 if (isset($_POST['coords'])) {
                                     echo $_POST['coords'];
                                 }
                                 ?>"/>
                                 <input type="submit" name="crearPiso" value="Enviar">
-                                <form>
+                            </form>
+                        </div>
+                        <div class="4u" id="sidebar">
+                            <hr class="first" />
+                            <section>
+                                <header>
+                                    <h3>&iquest;Qu&eacute; datos son importantes?</h3>
+                                </header>
+                                <p>
+                                    Una vez rellenado el formulario y que tengas tu piso
+                                    podr&aacute;s a&ntilde;adir m&aacute;s datos como contactos
+                                    de interes del piso, una descripci&oacute;n del piso que ser&aacute;
+                                    vista cuando se busque el piso, etc.
+                                </p>
+                            </section>
+                            <hr />  
+                            <section>
+                                <header>
+                                    <h3><strong>ATENCI&Oacute;N</strong></h3>
+                                </header>
+                                <p>
+                                    &iexcl;Es fundamental permitir el acceso a la geolocalizaci&oacute;n
+                                    a Social Flat para detectar donde est&aacute; el piso!
+                                </p>    
+                            </section>
+                        </div>
+                    </div>
+                </div>
 
-                                    </div>
-                                    <div class="4u" id="sidebar">
-                                        <hr class="first" />
-                                        <section>
-                                            <header>
-                                                <h3>&iquest;Qu&eacute; datos son importantes?</h3>
-                                            </header>
-                                            <p>
-                                                Una vez rellenado el formulario y que tengas tu piso
-                                                podr&aacute;s a&ntilde;adir m&aacute;s datos como contactos
-                                                de interes del piso, una descripci&oacute;n del piso que ser&aacute;
-                                                vista cuando se busque el piso, etc.
-                                            </p>
-                                        </section>
-                                        <hr />  
-                                        <section>
-                                            <header>
-                                                <h3><strong>ATENCI&Oacute;N</strong></h3>
-                                            </header>
-                                            <p>
-                                                &iexcl;Es fundamental permitir el acceso a la geolocalizaci&oacute;n
-                                                a Social Flat para detectar donde est&aacute; el piso!
-                                            </p>    
-                                        </section>
-                                    </div>
-                                    </div>
-                                    </div>
+            </div>
 
-                                    </div>
+            <?php include_once './includes/footer.html'; ?>
 
-                                    <?php include_once './includes/footer.html'; ?>
-
-                                    </body>
-                                    </html>
-                                    <?php
-                                } else if (!nuevo()) {
-                                    header('Location: home.php');
-                                } else {
-                                    setcookie('auth', 'auth', time() + 7);
-                                    header('Location: ../entrar.php?auth=f');
-                                }
-                                ?>
+        </body>
+    </html>
+    <?php
+} else if (!nuevo()) {
+    header('Location: home.php');
+} else {
+    setcookie('auth', 'auth', time() + 7);
+    header('Location: ../entrar.php?auth=f');
+}
+?>

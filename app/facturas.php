@@ -5,7 +5,7 @@ if (isset($_SESSION['user'])) {
     conectarBD();
     ?>
     <!DOCTYPE HTML>
-    <html>
+    <html xmlns="http://www.w3.org/1999/xhtml">
         <head>
             <title>Social Flat - Facturas</title>
             <?php include_once './includes/headers.html'; ?>
@@ -146,7 +146,7 @@ if (isset($_SESSION['user'])) {
                                 <header>
                                     <h2>Su estatus</h2>
                                     <h3><?php
-                                        $resultado = mysql_query("SELECT `num_personas` FROM `piso` WHERE `ID_piso` LIKE '$piso'");
+                                        $resultado = mysql_query("SELECT COUNT(*) FROM `user` WHERE `id_piso` LIKE '$piso'");
                                         $numero = mysql_fetch_row($resultado);
                                         $divisor = $numero[0];
                                         if ($divisor == 0) {
