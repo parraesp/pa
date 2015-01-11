@@ -15,7 +15,7 @@ conectarBD();
             <nav id="nav">
                 <ul>
                     <li><a href="index.html">Inicio</a></li>
-                    <li><a href="left-sidebar.html">Sobre nosotros</a></li>
+                    <li><a href="sobre_nosotros.html">Sobre nosotros</a></li>
                     <li><a href="registro.php">Registro</a></li>
                     <li><a href="entrar.php">Entrar</a></li>
                 </ul>
@@ -108,6 +108,36 @@ conectarBD();
                 </div>
             </div>
         </div>
-        <?php include_once 'app/includes/footer.html'; ?>
+           <!-- Footer -->
+        <div id="footer">
+            <!-- Contact -->
+            <section class="contact">
+                <ul class="icons">
+                    <li>
+                        <a href="https://twitter.com/Social_Flat" class="icon fa-twitter">
+                            <span class="label">
+                                Twitter
+                            </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.facebook.com/pages/Social-Flat/1017974724883225?ref=bookmarks" class="icon fa-facebook">
+                            <span class="label">
+                                Facebook
+                            </span>
+                        </a>
+                    </li>
+
+                </ul>
+            </section>
+            <!-- Copyright -->
+            <div class="copyright">
+                <ul class="menu">
+                    <li>&copy; Untitled. All rights reserved.</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+                </ul>
+            </div>
+        </div>
+    </body>
+</html>
     </body>
 </html>
