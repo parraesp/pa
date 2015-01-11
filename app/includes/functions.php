@@ -4,6 +4,12 @@ if(isset($_GET['exit'])){
         header("Location: ../entrar.php");
 }
 
+function conectarBD() {
+    $conexion = mysql_connect("localhost", "root", "");
+    mysql_select_db('social_flat', $conexion);
+>>>>>>> origin/master
+}
+
 function nuevo() {
     $ban = false;
     $us = $_SESSION['user'];
