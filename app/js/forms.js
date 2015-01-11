@@ -148,7 +148,7 @@ function crearContacto(piso) {
                 Nombre <input type="text" placeholder="Nombre del contacto" name="nombre">\n\
                 Telefono <input type="text" placeholder="Telefono" name="tel">\n\
                 Email <input type="email" placeholder="Correo electr&oacute;nico" name="email"><br>\n\
-                                <input type ="hidden" name="creador" value="' + piso + '">\n\
+                <input type ="hidden" name="creador" value="' + piso + '">\n\
                 <input type ="hidden" name="fecha" value="' + Math.floor(Date.now() / 1000) + '">\n\
                 <input type="submit" value="Enviar" name="contacto">\n\
                 </form>',
