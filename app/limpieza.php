@@ -12,6 +12,7 @@ if (isset($_SESSION['user'])) {
             conectarBD();
             ?>
             <script type="text/javascript">
+                <!--
                 var zonas = [];
                 var nombres = [];
     <?php
@@ -87,6 +88,7 @@ if (isset($_SESSION['user'])) {
         }
     }
     ?>
+        //-->
             </script>
         </head>
         <body class="no-sidebar" onload="<?php
@@ -169,7 +171,7 @@ if (isset($_SESSION['user'])) {
                                     }
                                 }
                             }
-                            ?><script type='text/javascript'> location.replace("limpieza.php");</script><?php
+                            ?><script type='text/javascript'> location.replace('limpieza.php');</script><?php
                         }
                     }
                     ?>

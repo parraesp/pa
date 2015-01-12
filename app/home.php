@@ -10,6 +10,7 @@ if (isset($_SESSION['user'])) {
             <title>Social Flat - Inicio</title>
             <?php include_once './includes/headers.html'; ?>
             <script type="text/javascript">
+                <!--
                 var zonas = [];
                 var nombres = [];
     <?php
@@ -82,6 +83,7 @@ if (isset($_SESSION['user'])) {
         }
     }
     ?>
+        //-->
             </script>
         </head>
         <body class="right-sidebar" onload="<?php

@@ -21,7 +21,7 @@ if (isset($_SESSION['user'])) {
                         $('#datosPiso').hide();
     <?php } ?>
                 });
-    -->
+    //-->
             </script>
         </head>
         <body class="no-sidebar">
@@ -47,7 +47,7 @@ if (isset($_SESSION['user'])) {
                         } else {
                             mysql_query("DELETE FROM `piso` WHERE ID_piso='$idpiso'");
                         }
-                        ?><script type='text/javascript'> location.replace("preferencias.php");</script><?php
+                        ?><script type='text/javascript'> location.replace('preferencias.php');</script><?php
                     }
                     if (isset($_GET['borrarUsuario'])) {
                         mysql_query("DELETE FROM `user` WHERE email='$email'");
@@ -60,7 +60,7 @@ if (isset($_SESSION['user'])) {
                             mysql_query("DELETE FROM `piso` WHERE ID_piso='$idpiso'");
                         }
                         session_destroy();
-                        ?><script type='text/javascript'> location.replace("preferencias.php");</script><?php
+                        ?><script type='text/javascript'> location.replace('preferencias.php');</script><?php
                     }
                     if (isset($_POST['editarPiso'])) {
                         $salt1 = '$%325cxwe2KK';
