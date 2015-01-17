@@ -19,7 +19,7 @@ include_once './includes/functions.php';
                         $('#datosPiso').hide();
     <?php } ?>
                 });
-    -->
+    //-->
             </script>
         </head>
         <body class="no-sidebar">
@@ -45,7 +45,7 @@ include_once './includes/functions.php';
                         } else {
                             mysql_query("DELETE FROM `piso` WHERE ID_piso='$idpiso'");
                         }
-                        ?><script type='text/javascript'> location.replace("preferencias.php");</script><?php
+                        ?><script type='text/javascript'> location.replace('preferencias.php');</script><?php
                     }
                     if (isset($_GET['borrarUsuario'])) {
                         mysql_query("DELETE FROM `user` WHERE email='$email'");
@@ -58,7 +58,7 @@ include_once './includes/functions.php';
                             mysql_query("DELETE FROM `piso` WHERE ID_piso='$idpiso'");
                         }
                         session_destroy();
-                        ?><script type='text/javascript'> location.replace("preferencias.php");</script><?php
+                        ?><script type='text/javascript'> location.replace('preferencias.php');</script><?php
                     }
                     if (isset($_POST['editarPiso'])) {
                         $salt1 = '$%325cxwe2KK';

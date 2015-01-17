@@ -14,6 +14,7 @@ conectarBD();
             
             ?>
             <script type="text/javascript">
+                <!--
                 var zonas = [];
                 var nombres = [];
     <?php
@@ -89,6 +90,7 @@ conectarBD();
         }
     }
     ?>
+        //-->
             </script>
         </head>
         <body class="no-sidebar" onload="<?php
@@ -171,7 +173,7 @@ conectarBD();
                                     }
                                 }
                             }
-                            ?><script type='text/javascript'> location.replace("limpieza.php");</script><?php
+                            ?><script type='text/javascript'> location.replace('limpieza.php');</script><?php
                         }
                     }
                     ?>
