@@ -1,8 +1,8 @@
-<!DOCTYPE HTML>
 <?php
 include_once 'app/includes/functions.php';
 conectarBD();
 ?>
+<!DOCTYPE HTML>
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
         <title>Social Flat - Registro</title>
@@ -66,7 +66,7 @@ conectarBD();
                             if ($validar) {
                                 if (mysql_num_rows($query) == 0) {
                                     $password = md5($salt1 . $password . $salt2);
-                                    mysql_query("INSERT INTO `social_flat`.`user` (`ID_user`, `email`, `username`, `password`, `id_piso`) VALUES (NULL, '$email', '$name', '$password', -1);");
+                                    mysql_query("INSERT INTO `u776346137_socia`.`user` (`ID_user`, `email`, `username`, `password`, `id_piso`) VALUES (NULL, '$email', '$name', '$password', -1);");
                                     setcookie('exito', 'exito', time() + 8);
                                     header('Location: entrar.php?reg=suc');
                                 } else {

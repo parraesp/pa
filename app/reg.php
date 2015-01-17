@@ -44,7 +44,7 @@ if (isset($_SESSION['user'])) {
                                 $ban = false;
                             }
                             if ($ban) {
-                                $query = "INSERT INTO `social_flat`.`mensaje` (`id_mensaje`, `autor`, `destinatario`, `fecha`, `estado`, `cuerpo`) VALUES (NULL, '$user', '$dest', '$fecha', '0', '$cuerpo');";
+                                $query = "INSERT INTO `u776346137_socia`.`mensaje` (`id_mensaje`, `autor`, `destinatario`, `fecha`, `estado`, `cuerpo`) VALUES (NULL, '$user', '$dest', '$fecha', '0', '$cuerpo');";
                                 mysql_query($query);
                             }
                         }

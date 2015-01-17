@@ -157,13 +157,13 @@ if (isset($_SESSION['user'])) {
                             <?php
                             $companeros = mysql_query("SELECT * FROM `user` WHERE `ID_piso` LIKE '$piso'");
                             $result2 = mysql_query("SELECT creador FROM `piso` WHERE `ID_piso`='$piso'");
-                            $creador = mysql_fetch_assoc($result2)['creador'];
+                            $creador = mysql_fetch_assoc($result2);
                             if (isset($_GET['borrarUsuario'])) {
                                 $id = filter_input(INPUT_GET, 'borrarUsuario', FILTER_SANITIZE_STRING);
                                 $resultAux = mysql_query("SELECT id_piso FROM `user` WHERE `ID_user`='$id'");
-                                $idpisoAux = mysql_fetch_assoc($resultAux)['id_piso'];
-                                if ($idpisoAux == $piso && $creador = $user) {
-                                    mysql_query("UPDATE `social_flat`.`user` SET id_piso='-1' WHERE `ID_user`='$id'");
+                                $idpisoAux = mysql_fetch_assoc($resultAux);
+                                if ($idpisoAux['id_piso'] == $piso && $creador['creador'] = $user) {
+                                    mysql_query("UPDATE `u776346137_socia`.`user` SET id_piso='-1' WHERE `ID_user`='$id'");
                                 }
                             }
                             ?>

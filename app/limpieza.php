@@ -1,6 +1,8 @@
 <?php
 session_start();
 if (isset($_SESSION['user'])) {
+include_once './includes/functions.php';
+conectarBD();
     ?>
     <!DOCTYPE HTML>
     <html xmlns="http://www.w3.org/1999/xhtml">
@@ -8,8 +10,8 @@ if (isset($_SESSION['user'])) {
             <title>Social Flat - Limpieza</title>
             <?php
             include_once './includes/headers.html';
-            include_once './includes/functions.php';
-            conectarBD();
+            
+            
             ?>
             <script type="text/javascript">
                 var zonas = [];
@@ -147,15 +149,15 @@ if (isset($_SESSION['user'])) {
                             $idpiso = $_SESSION['idpiso'];
                             $result = mysql_query("SELECT * FROM `limpieza` WHERE `ID_piso`='$idpiso'");
                             if (mysql_num_rows($result) == 0) {
-                                $query = "INSERT INTO `social_flat`.`limpieza` (`ID_piso`, `inicio`, `fin`, `frecuencia`) VALUES ('$idpiso', '$inicio', '$fin', '$frecuencia');";
+                                $query = "INSERT INTO `u776346137_socia`.`limpieza` (`ID_piso`, `inicio`, `fin`, `frecuencia`) VALUES ('$idpiso', '$inicio', '$fin', '$frecuencia');";
                                 $res = mysql_query($query);
                                 for ($i = 0; $i < $zonas; $i++) {
                                     $nombre = $zona[$i];
-                                    $query = "INSERT INTO `social_flat`.`zonas_limpieza` (`ID_piso`, `nombre`) VALUES ('$idpiso', '$nombre');";
+                                    $query = "INSERT INTO `u776346137_socia`.`zonas_limpieza` (`ID_piso`, `nombre`) VALUES ('$idpiso', '$nombre');";
                                     $res = mysql_query($query);
                                 }
                             } else {
-                                $query = "UPDATE `social_flat`.`limpieza` SET inicio='$inicio',fin='$fin',frecuencia='$frecuencia' WHERE `ID_piso`='$idpiso'";
+                                $query = "UPDATE `u776346137_socia`.`limpieza` SET inicio='$inicio',fin='$fin',frecuencia='$frecuencia' WHERE `ID_piso`='$idpiso'";
                                 $res = mysql_query($query);
                                 $result = mysql_query("SELECT nombre FROM `zonas_limpieza` WHERE `ID_piso`='$idpiso'");
                                 if ($zonas != 0) {
@@ -164,7 +166,7 @@ if (isset($_SESSION['user'])) {
                                     }
                                     for ($i = 0; $i < $zonas; $i++) {
                                         $nombre = $zona[$i];
-                                        $query = "INSERT INTO `social_flat`.`zonas_limpieza` (`ID_piso`, `nombre`) VALUES ('$idpiso', '$nombre');";
+                                        $query = "INSERT INTO `u776346137_socia`.`zonas_limpieza` (`ID_piso`, `nombre`) VALUES ('$idpiso', '$nombre');";
                                         $res = mysql_query($query);
                                     }
                                 }

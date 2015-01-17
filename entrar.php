@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 session_start();
 include_once 'app/includes/functions.php';
 conectarBD();
@@ -46,13 +46,12 @@ conectarBD();
                                 <?php
                             }
                             if ($validar) {
-                                if (mysql_num_rows($query) != 0) {
+                                if (mysql_num_rows($query)>0) {
                                     if (isset($_POST['recordar'])) {
-                                        setcookie('recordar', $email, time() + 30 * 3600 * 24);
+                                        setcookie('recordar', $email, time() + 30 * 3600 * 24);}
                                         $_SESSION['user'] = $email;
                                         $temp = mysql_fetch_array($query);
                                         $_SESSION['idpiso'] = $temp[4];
-                                    }
                                     header('Location: app/home.php');
                                 } else {
                                     ?><div class="error">&iexcl;Combinaci&oacute;n de usuario y contrase&ntilde;a incorrecta!</div><?php

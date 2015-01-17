@@ -1,17 +1,15 @@
 <?php
 session_start();
 if (isset($_SESSION['user'])) {
+include_once './includes/functions.php'; 
+            conectarBD();
     ?>
     <!DOCTYPE HTML>
     <html xmlns="http://www.w3.org/1999/xhtml">
         <head>
             <title>Social Flat - Preferencias</title>
-            <?php
-            mysql_connect('localhost', 'root', '');
-            mysql_select_db('social_flat');
-            ?>
             <?php include_once './includes/headers.html'; ?>
-            <?php include_once './includes/functions.php'; ?>
+
             <script type="text/javascript">
                 <!--
                         $(document).ready(function() {
@@ -37,13 +35,13 @@ if (isset($_SESSION['user'])) {
                         $sinPiso = true;
                     }
                     if (isset($_GET['borrarPiso'])) {
-                        mysql_query("UPDATE `social_flat`.`user` SET id_piso='-1' WHERE `email`='$email'");
+                        mysql_query("UPDATE `u776346137_socia`.`user` SET id_piso='-1' WHERE `email`='$email'");
                         $_SESSION['idpiso'] = '-1';
                         $result = mysql_query("SELECT email FROM `user` WHERE `id_piso`='$idpiso'");
                         $nuevo = mysql_fetch_array($result);
                         if ($nuevo) {
                             $nuevoEmail = $nuevo['email'];
-                            mysql_query("UPDATE `social_flat`.`piso` SET creador='$nuevoEmail' WHERE `ID_piso`='$idpiso'");
+                            mysql_query("UPDATE `u776346137_socia`.`piso` SET creador='$nuevoEmail' WHERE `ID_piso`='$idpiso'");
                         } else {
                             mysql_query("DELETE FROM `piso` WHERE ID_piso='$idpiso'");
                         }
@@ -55,7 +53,7 @@ if (isset($_SESSION['user'])) {
                         $nuevo = mysql_fetch_array($result);
                         if ($nuevo) {
                             $nuevoEmail = $nuevo['email'];
-                            mysql_query("UPDATE `social_flat`.`piso` SET creador='$nuevoEmail' WHERE `ID_piso`='$idpiso'");
+                            mysql_query("UPDATE `u776346137_socia`.`piso` SET creador='$nuevoEmail' WHERE `ID_piso`='$idpiso'");
                         } else {
                             mysql_query("DELETE FROM `piso` WHERE ID_piso='$idpiso'");
                         }
@@ -67,8 +65,8 @@ if (isset($_SESSION['user'])) {
                         $salt2 = 'asdad$&/&/&';
                         $confPassword = md5($salt1 . filter_input(INPUT_POST, 'password', FILTER_SANITIZE_STRING) . $salt2);
                         $result = mysql_query("SELECT password FROM `user` WHERE `email`='$email'");
-                        $password = mysql_fetch_array($result)[0];
-                        if ($confPassword === $password) {
+                        $password = mysql_fetch_array($result);
+                        if ($confPassword === $password[0]) {
                             $validar = true;
                             $nombre = filter_input(INPUT_POST, 'nombre', FILTER_SANITIZE_STRING);
                             $num = filter_input(INPUT_POST, 'num', FILTER_VALIDATE_INT);
@@ -99,7 +97,7 @@ if (isset($_SESSION['user'])) {
                                 <?php
                             }
                             if ($validar) {
-                                mysql_query("UPDATE `social_flat`.`piso` SET nombre='$nombre',num_personas='$num',direccion='$direccion',descripcion='$descripcion' WHERE `ID_piso`='$idpiso'");
+                                mysql_query("UPDATE `u776346137_socia`.`piso` SET nombre='$nombre',num_personas='$num',direccion='$direccion',descripcion='$descripcion' WHERE `ID_piso`='$idpiso'");
                                 ?>
                                 <div class="success">Piso modificado con &eacute;xito.</div>
                                 <?php
@@ -115,8 +113,8 @@ if (isset($_SESSION['user'])) {
                         $salt2 = 'asdad$&/&/&';
                         $confPassword = md5($salt1 . filter_input(INPUT_POST, 'password', FILTER_SANITIZE_STRING) . $salt2);
                         $result = mysql_query("SELECT password FROM `user` WHERE `email`='$email'");
-                        $password = mysql_fetch_array($result)[0];
-                        if ($confPassword === $password) {
+                        $password = mysql_fetch_array($result);
+                        if ($confPassword === $password[0]) {
                             $username = filter_input(INPUT_POST, 'nombre', FILTER_SANITIZE_STRING);
                             if ($username === NULL || $username === FALSE || strlen($username) > 25 || strlen($username) < 5) {
                                 $validar = FALSE;
@@ -124,7 +122,7 @@ if (isset($_SESSION['user'])) {
                                 <div class="error">Hay que especificar una nombre entre 5 y 25 caracteres.</div>
                                 <?php
                             } else {
-                                mysql_query("UPDATE `social_flat`.`user` SET username='$username' WHERE `email`='$email'");
+                                mysql_query("UPDATE `u776346137_socia`.`user` SET username='$username' WHERE `email`='$email'");
                                 ?>
                                 <div class="success">Nombre modificado con &eacute;xito.</div>
                                 <?php
@@ -140,12 +138,12 @@ if (isset($_SESSION['user'])) {
                         $salt2 = 'asdad$&/&/&';
                         $confPassword = md5($salt1 . filter_input(INPUT_POST, 'passAnt', FILTER_SANITIZE_STRING) . $salt2);
                         $result = mysql_query("SELECT password FROM `user` WHERE `email`='$email'");
-                        $password = mysql_fetch_array($result)[0];
-                        if ($confPassword === $password) {
+                        $password = mysql_fetch_array($result);
+                        if ($confPassword === $password[0]) {
                             $newPass = md5($salt1 . filter_input(INPUT_POST, 'newPass', FILTER_SANITIZE_STRING) . $salt2);
                             $newPass2 = md5($salt1 . filter_input(INPUT_POST, 'confPass', FILTER_SANITIZE_STRING) . $salt2);
                             if ($newPass === $newPass2) {
-                                mysql_query("UPDATE `social_flat`.`user` SET password='$newPass' WHERE `email`='$email'");
+                                mysql_query("UPDATE `u776346137_socia`.`user` SET password='$newPass' WHERE `email`='$email'");
                                 ?>
                                 <div class="success">Contrase&ntilde;a modificada con &eacute;xito.</div>
                                 <?php
@@ -161,7 +159,7 @@ if (isset($_SESSION['user'])) {
                         }
                     }
                     $result = mysql_query("SELECT username FROM `user` WHERE `email`='$email'");
-                    $username = mysql_fetch_array($result)[0];
+                    $username = mysql_fetch_array($result);
                     if (!$sinPiso) {
                         $result2 = mysql_query("SELECT creador,nombre,num_personas,direccion,descripcion FROM `piso` WHERE `ID_piso`='$idpiso'");
                         $piso = mysql_fetch_assoc($result2);
@@ -175,7 +173,7 @@ if (isset($_SESSION['user'])) {
                     <a onclick="mostrarCuenta()" class="button">Mi cuenta</a>
                     <a onclick="mostrarPiso()" class="button">Mi piso</a>
                     <div id="datosUsuario">
-                        <p><strong>Nombre:</strong> <?php echo "$username"; ?></p>
+                        <p><strong>Nombre:</strong> <?php echo "$username[0]"; ?></p>
                         <p><strong>Email:</strong> <?php echo "$email"; ?></p>
                         <ul>
                             <li><a onclick="editarNombre()">Editar nombre</a></li>

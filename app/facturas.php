@@ -73,14 +73,14 @@ if (isset($_SESSION['user'])) {
                                     $ban = false;
                                 }
                                 if ($ban) {
-                                    $query = "INSERT INTO `social_flat`.`factura` (`ID_factura`, `ID_piso`, `creador`, `valor`, `fecha`, `estado`, `nombre`) VALUES (NULL, '$piso', '$user', '$valor', '$fecha', '0', '$nombre');";
+                                    $query = "INSERT INTO `u776346137_socia`.`factura` (`ID_factura`, `ID_piso`, `creador`, `valor`, `fecha`, `estado`, `nombre`) VALUES (NULL, '$piso', '$user', '$valor', '$fecha', '0', '$nombre');";
                                     $res = mysql_query($query);
                                     $var = mysql_query("SELECT `ID_factura` FROM `factura` ORDER BY `fecha` DESC LIMIT 1");
-                                    $id = mysql_fetch_array($var)[0];
+                                    $id = mysql_fetch_array($var);
                                     $var2 = mysql_query("SELECT * FROM `user` WHERE `id_piso` LIKE '$piso'");
 
                                     while ($id2 = mysql_fetch_row($var2)) {
-                                        $query = "INSERT INTO `social_flat`.`factura_deud` (`ID_factura`, `deudor`, `fecha`, `estado`) VALUES ('$id', '$id2[1]', '$fecha', '0');";
+                                        $query = "INSERT INTO `u776346137_socia`.`factura_deud` (`ID_factura`, `deudor`, `fecha`, `estado`) VALUES ('$id[0]', '$id2[1]', '$fecha', '0');";
                                         mysql_query($query);
                                     }
                                     ?>

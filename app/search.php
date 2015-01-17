@@ -1,7 +1,8 @@
-<?php
+﻿<?php
 session_start();
+include_once 'includes/functions.php';
 if (isset($_SESSION['user'])) {
-    include_once 'includes/functions.php';
+    
     conectarBD();
     ?>
     <!DOCTYPE HTML>
